@@ -3,8 +3,9 @@
 
 import random, os, sys;
 
-f = open('../entrada/input.txt')
-arquivo = "graph"
+arquivo = str(sys.argv[1]) # nome do arquivo a ser usado de input
+
+f = open(arquivo+'.txt')
 
 with f:
 	k = [int(x) for x in f.readline().split()]
