@@ -3,7 +3,7 @@
 
   Funções de inserção, leitura, impressão e outras manipulações.
 
-  Criação: 15/09/12
+  Criação: 09/10/12
   Autor: Sandro Miccoli
 
 */
@@ -46,32 +46,29 @@ void destroiMatriz(Matriz *matriz){
     Leitura
 */
 
-// Lê todas as matrizes do arquivo e as insere em um vetor de matriz
-void leMatrizes(FILE * arquivo, int k, Matriz * matrizes){
+// Lê a matriz do arquivo
+void leMatriz(FILE * arquivo, Matriz * M1){
 
-    int  m, n;
+    int n;
 
-    for (int i=0; i < k * 2; i++){
+    fscanf(arquivo, "%d", &n);
 
-        fscanf(arquivo, "%d %d", &m, &n);
+    printf("N: %d\n",n);
 
-        Matriz M1;
-        criaMatriz(m, n, &M1);
-        preencheMatriz(arquivo, M1);
+    criaMatriz(n, n, M1);
+    preencheMatriz(arquivo, M1);
 
-        matrizes[i] = M1;
 
-    }
 }
 
 // Preenche a matriz m com os valores da matriz do arquivo.
-void preencheMatriz(FILE * arquivo, Matriz m){
+void preencheMatriz(FILE * arquivo, Matriz *m){
     int num;
 
-    for (int x=0; x < m.col; x++){
-            for (int y=0; y < m.lin; y++){
+    for (int x=0; x < m->col; x++){
+            for (int y=0; y < m->lin; y++){
                 fscanf(arquivo,"%d ",&num);
-                m.matriz[x][y] = num;
+                m->matriz[x][y] = num;
             }
         }
 

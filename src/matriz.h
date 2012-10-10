@@ -3,7 +3,7 @@
 
   Funções de inserção, leitura, impressão e outras manipulações.
 
-  Criação: 15/09/12
+  Criação: 09/10/12
   Autor: Sandro Miccoli
 
 */
@@ -25,9 +25,9 @@ void destroiMatriz(Matriz *matriz);
 
 
 // Leitura e Escrita
-void leMatrizes(FILE * arquivo, int k, Matriz * matrizes);
+void leMatriz(FILE * arquivo, Matriz * M1);
 
-void preencheMatriz(FILE * arquivo, Matriz m);
+void preencheMatriz(FILE * arquivo, Matriz * m);
 
 void imprimeMatriz(Matriz m);
 

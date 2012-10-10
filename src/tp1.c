@@ -12,7 +12,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "arquivos.h"
-#include "grafos.h"
+#include "grafos_matriz.h"
+#include "matriz.h"
 
 int main(int argc, char *argv[]){
 
@@ -34,27 +35,20 @@ int main(int argc, char *argv[]){
 
         fscanf(inp, "%d ", &k); // Lê as k instâncias de problemas
 
-        fscanf(inp, "%d ", &n); // Lê as n cidades
+        //fscanf(inp, "%d ", &n); // Lê as n cidades
 
-        G = inicializaGrafo(n);
+        //G = inicializaGrafo(n);
 
-        printf("INSTANCIAS: %d\nCIDADES: %d\n\n",k,n);
+        Matriz matrizAdj;
 
-        for (int i=0; i < n; i++){
-            for (int j=0; j < n; j++){
+        printf("INSTANCIAS: %d\n\n",k);
 
-                fscanf(inp, "%d", &dist);
+        leMatriz(inp, &matrizAdj); // Lê matrizes do arquivo e as insere no array matrizes
 
-               // if (j < i+1){  // Condição para trabalhar apenas com a diagonal inferior da matriz de adjacência
-                    //printf("%d (%d,%d) ", dist,i,j);
-                    printf("%d ", dist);
-                    insereAresta(G,i,j,dist);
-               // }
-            }
-            printf("\n");
-        }
-        printf("\n");
-        imprimeGrafo(G);
+        imprimeMatriz(matrizAdj);
+
+        //insereAresta(G,i,j,dist);
+   //     imprimeGrafo(G);
 
         fechaArquivo(inp);
         fechaArquivo(out);
