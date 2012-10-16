@@ -37,5 +37,12 @@ typedef struct grafo Grafo;
 // Inicializa grafo
 void inicializaGrafo(FILE * arquivo, Grafo * G);
 
+// Imprime o grafo
+void imprimeGrafo(Grafo G);
+
+// Limpa o grafo da memória
+void freeGrafo(Grafo G);
+
+
 
 #endif /* GRAFOS_H_ */

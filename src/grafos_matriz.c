@@ -29,9 +29,28 @@ void inicializaGrafo(FILE * arquivo, Grafo * G){
         G->Vol[i] = num;
    }
 
+};
 
+// Imprime o grafo
+void imprimeGrafo(Grafo G){
+
+    //Imprime número de cidades
+    printf("%d\n",G.N);
+
+    imprimeMatriz(G.matrizAdj);
+
+    for (int i = 0; i < G.N; i++){
+        printf("%d ",G.Vol[i]);
+    }
+    printf("\n");
 
 };
 
 
+void freeGrafo(Grafo G){
 
+    destroiMatriz(&(G.matrizAdj));
+
+    free(G.Vol);
+
+}
