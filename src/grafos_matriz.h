@@ -14,19 +14,28 @@
 
 #include "matriz.h"
 
+/*
+
+TODO:
+
+    Criar matriz de distância
+    Preencher volume de pedidos
+    Associar a matriz ao grafo no main
+
+*/
 
 // Estrutura básica de um grafo, contendo seu número de vértices, arestas e um ponteiro para sua matriz de adjacência.
 struct grafo {
-    Matriz matrizesAdj;
+    Matriz matrizAdj;
     int N; // Quantidade de cidades no grafo
-    int Vol[]; // Volume de pedidos de cada cidade
+    int *Vol; // Volume de pedidos de cada cidade
 };
 
 // Um objeto Grafo contém o endereço de um grafo
-typedef struct grafo *Grafo;
+typedef struct grafo Grafo;
 
 // Inicializa grafo
-Grafo inicializaGrafo(int V);
+void inicializaGrafo(FILE * arquivo, Grafo * G);
 
 
 #endif /* GRAFOS_H_ */

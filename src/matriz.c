@@ -53,7 +53,7 @@ void leMatriz(FILE * arquivo, Matriz * M1){
 
     fscanf(arquivo, "%d", &n);
 
-    printf("N: %d\n",n);
+//    printf("N: %d\n",n);
 
     criaMatriz(n, n, M1);
     preencheMatriz(arquivo, M1);

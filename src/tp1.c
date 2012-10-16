@@ -39,17 +39,25 @@ int main(int argc, char *argv[]){
 
         //G = inicializaGrafo(n);
 
-        Matriz matrizAdj;
+        //Matriz matrizAdj;
 
         printf("INSTANCIAS: %d\n\n",k);
 
-        leMatriz(inp, &matrizAdj); // Lê matrizes do arquivo e as insere no array matrizes
+        inicializaGrafo(inp, &G);
 
-        imprimeMatriz(matrizAdj);
+        //leMatriz(inp, &(G.matrizAdj)); // Lê matrizes do arquivo e as insere na variável de matrizAjd
+
+        imprimeMatriz(G.matrizAdj);
+
+
+       for (int i = 0; i < G.N; i++){
+            printf("%d ",G.Vol[i]);
+       }
 
         //insereAresta(G,i,j,dist);
    //     imprimeGrafo(G);
 
+        destroiMatriz(&(G.matrizAdj));
         fechaArquivo(inp);
         fechaArquivo(out);
 
