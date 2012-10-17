@@ -4,7 +4,7 @@
 '''
 Gerador de matrizes quadradadas simétricas em relação à diagonal principal.
 
-Para executar: ./graphGenerator.py <n instancias> <dimensão da matriz>
+Para executar: ./graphGenerator.py <n instancias> <dimensão da matriz> <0 para esparsos 1 para densos>
 
 Para salvar num arquivo: <comando acima> > <arquivo de saída>
 
@@ -31,6 +31,7 @@ import numpy
 
 k = int(sys.argv[1]) # instâncias do problema
 maxN = int(sys.argv[2]) # tamanho máximo de cidades
+sORd = int(sys.argv[3]) # gera grafos esparsos (0) ou densos (1)
 
 class SymNDArray(numpy.ndarray):
     def __setitem__(self, (i, j), value):
@@ -49,26 +50,33 @@ print k
 
 for l in range(k):
 
-	print maxN
+    print maxN
 
-	matriz = symarray(numpy.zeros((maxN, maxN)))
 
-	# Gera o grafo simétrico.
-	for i in range(maxN):
-		for j in range(maxN):
-			matriz[i,j] = random.randint(0,9)
-			if i==j:
-				matriz[i,j] = 0
+    matriz = symarray(numpy.zeros((maxN, maxN)))
 
-	# Imprime o grafo
-	for i in range(maxN):
-		for j in range(maxN):
-			print int(matriz[i][j]),
-		print ""
+    # Gera o grafo simétrico.
+    for i in range(maxN):
+        for j in range(maxN):
 
-	# Imprime o volume médio de pedidos que cada cidade
-	for i in range(maxN):
-		print random.randint(0,1000),
-	print ""
+            sparse =[0,0,0,0,0,random.randint(0,9),random.randint(0,9),random.randint(0,9),random.randint(0,9),random.randint(0,9)]
+
+            if sORd==0:
+                matriz[i,j] = sparse[random.randint(0,9)]
+            else:
+                matriz[i,j] = random.randint(0,9)
+            if i==j:
+                matriz[i,j] = 0
+
+    # Imprime o grafo
+    for i in range(maxN):
+        for j in range(maxN):
+            print int(matriz[i][j]),
+        print ""
+
+    # Imprime o volume médio de pedidos que cada cidade
+    for i in range(maxN):
+        print random.randint(0,1000),
+    print ""
 
 
