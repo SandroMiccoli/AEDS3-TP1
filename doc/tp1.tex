@@ -1,7 +1,7 @@
-%	DocumentaÁ„o do Trabalho Pr·tico 1 de AEDSIII
+%	Documenta√ß√£o do Trabalho Pr√°tico 1 de AEDSIII
 %	@Sandro Miccoli
 %
-%	* VocÍ pode identificar erros de grafia atravÈs do seguinte comando linux:
+%	* Voc√™ pode identificar erros de grafia atrav√©s do seguinte comando linux:
 %		aspell --encoding="iso8859-1" -c -t=tex --lang="pt_BR" tp0.tex
 %
 
@@ -30,11 +30,11 @@
 
 \sloppy
 
-\title{TRABALHO PR¡TICO 1: \\ Grafos}
+\title{TRABALHO PR√ÅTICO 1: \\ Grafos}
 
 \author{Sandro Miccoli - 2009052409 - smiccoli@dcc.ufmg.br}
 
-\address{Departamento de CiÍncia da ComputaÁ„o -- Universidade Federal de Minas Gerais (UFMG)\\
+\address{Departamento de Ci√™ncia da Computa√ß√£o -- Universidade Federal de Minas Gerais (UFMG)\\
 \\
 \today
 }
@@ -45,33 +45,33 @@
 \maketitle
 
 \begin{resumo}
-Esse relatÛrio descreve como foi foi solucionado o problema proposto no Trabalho Pr·tico 1, o qual ser· detalhado ao longo das prÛximas seÁıes. Ser· descrito tambÈm a modelagem do problema e a soluÁ„o proposta para tal. Finalmente ser· detalhado a an·lise de complexidade dos algoritmos, os testes utilizados para comprovar tais an·lises e uma breve conclus„o do trabalho implementado.
+Esse relat√≥rio descreve como foi foi solucionado o problema proposto no Trabalho Pr√°tico 1, o qual ser√° detalhado ao longo das pr√≥ximas se√ß√µes. Ser√° descrito tamb√©m a modelagem do problema e a solu√ß√£o proposta para tal. Finalmente ser√° detalhado a an√°lise de complexidade dos algoritmos, os testes utilizados para comprovar tais an√°lises e uma breve conclus√£o do trabalho implementado.
 
 \end{resumo}
 
-\section{INTRODU«√O}
+\section{INTRODU√á√ÉO}
 
-	A situaÁ„o que deparamos neste trabalho È a seguinte: a distribuidora de produtos, Atlanticon, est· precisando de uma consultoria para decidir em qual cidade deve instalar a nova filial para servir uma daterminada regi„o.
+	A situa√ß√£o que deparamos neste trabalho √© a seguinte: a distribuidora de produtos, Atlanticon, est√° precisando de uma consultoria para decidir em qual cidade deve instalar a nova filial para servir uma daterminada regi√£o.
 
-	A empresa possui conhecimento das dist‚ncias entre quaisquer duas cidades da regi„o que sejam conectadas por algum trilho. AlÈm disso, o trem, precariamente, realiza a entrega de apenas um produto por viagem, tornando necess·rio retornar para a filial para carregar um novo produto.
+	A empresa possui conhecimento das dist√¢ncias entre quaisquer duas cidades da regi√£o que sejam conectadas por algum trilho. Al√©m disso, o trem, precariamente, realiza a entrega de apenas um produto por viagem, tornando necess√°rio retornar para a filial para carregar um novo produto.
 
-	Existem 3 cen·rios distintos que a Atlanticon deseja saber qual a melhor opÁ„o de cidade para instalar a nova filial, e o objetivo do trabalho È solucionar esse problema.
+	Existem 3 cen√°rios distintos que a Atlanticon deseja saber qual a melhor op√ß√£o de cidade para instalar a nova filial, e o objetivo do trabalho √© solucionar esse problema.
 
-	Descreveremos aqui os trÍs cen·rios:
+	Descreveremos aqui os tr√™s cen√°rios:
 
-	\textbf{Cen·rio 1: } Escolher a cidade de modo a minimizar os custos de gasto em combustÌvel. Considerando que cada cidade emite a mesma quantidade de pedidos em um mesmo intervalo de tempo.
+	\textbf{Cen√°rio 1: } Escolher a cidade de modo a minimizar os custos de gasto em combust√≠vel. Considerando que cada cidade emite a mesma quantidade de pedidos em um mesmo intervalo de tempo.
 
-	\textbf{Cen·rio 2: } Escolher a cidade para tambÈm minimizar os custos de gasto em combustÌvel. PorÈm, neste cen·rio cada cidade possui um volume diferente de pedidos, isso deve ser considerado para a escolha final.
+	\textbf{Cen√°rio 2: } Escolher a cidade para tamb√©m minimizar os custos de gasto em combust√≠vel. Por√©m, neste cen√°rio cada cidade possui um volume diferente de pedidos, isso deve ser considerado para a escolha final.
 
-	\textbf{Cen·rio 3: } A Atlanticon deseja garantir que o produto seja entregue num prazo de $X$ horas. A escolha da cidade se d· pelo menor valor possÌvel de $X$ que pudermos encontrar.
+	\textbf{Cen√°rio 3: } A Atlanticon deseja garantir que o produto seja entregue num prazo de $X$ horas. A escolha da cidade se d√° pelo menor valor poss√≠vel de $X$ que pudermos encontrar.
 
-	O restante deste relatÛrio È organizado da seguinte forma. A SeÁ„o~\ref{modelagem} descreve como foi feita a modelagem e manipulaÁ„o dos grafos. A SeÁ„o \ref{solucao_proposta} descreve rapidamente qual foi a soluÁ„o proposta alÈm do mÈtodo utilizado para calcular as dist‚ncias mÌnimas entre as cidades. A SeÁ„o~\ref{implementacao} trata de detalhes especÌficos da implementaÁ„o do trabalho: quais os arquivos utilizados; como È feita a compilaÁ„o e execuÁ„o; alÈm de detalhar o formato dos arquivos de entrada e saÌda. A SeÁ„o~\ref{avaliacao_experimental} contÈm a avaliaÁ„o experimental, quantificando o tempo de execuÁ„o de cada operaÁ„o com grafos de diversos tamanhos e formatos. A SeÁ„o~\ref{conclusao} conclui o trabalho.
+	O restante deste relat√≥rio √© organizado da seguinte forma. A Se√ß√£o~\ref{modelagem} descreve como foi feita a modelagem e manipula√ß√£o dos grafos. A Se√ß√£o \ref{solucao_proposta} descreve rapidamente qual foi a solu√ß√£o proposta al√©m do m√©todo utilizado para calcular as dist√¢ncias m√≠nimas entre as cidades. A Se√ß√£o~\ref{implementacao} trata de detalhes espec√≠ficos da implementa√ß√£o do trabalho: quais os arquivos utilizados; como √© feita a compila√ß√£o e execu√ß√£o; al√©m de detalhar o formato dos arquivos de entrada e sa√≠da. A Se√ß√£o~\ref{avaliacao_experimental} cont√©m a avalia√ß√£o experimental, quantificando o tempo de execu√ß√£o de cada opera√ß√£o com grafos de diversos tamanhos e formatos. A Se√ß√£o~\ref{conclusao} conclui o trabalho.
 
 
 \section{MODELAGEM}
 \label{modelagem}
 
-	Inicialmente, para trabalhar com grafos, foi criada uma estrutura que contÈm a informaÁ„o de quantos vÈrtices o grafo possui, nesse caso, cidades, e qual o volume de pedidos de cada cidade:
+	Inicialmente, para trabalhar com grafos, foi criada uma estrutura que cont√©m a informa√ß√£o de quantos v√©rtices o grafo possui, nesse caso, cidades, e qual o volume de pedidos de cada cidade:
 
     \begin{lstlisting}[language=c]
     typedef struct grafo {
@@ -87,290 +87,186 @@ Esse relatÛrio descreve como foi foi solucionado o problema proposto no Trabalho
 
     \end{lstlisting}
 
-    J· que o grafo que nos È passado como entrada È uma matriz de adjacÍncias, e como j· havÌamos implementado uma estrutura de matriz no Trabalho Pr·tico 0, reutilizamos o cÛdigo neste trabalho.
+    J√° que o grafo que nos √© passado como entrada √© uma matriz de adjac√™ncias, e como j√° hav√≠amos implementado uma estrutura de matriz no Trabalho Pr√°tico 0, reutilizamos o c√≥digo neste trabalho.
 
-	A complexidade de espaÁo dessa estrutura pode ser considerada como $O(n)$, sendo $n$ o tamanho bidimensional da matriz, ou seja, o produto entre a quantidade de linhas e colunas que ela possui.
+	A complexidade de espa√ßo dessa estrutura pode ser considerada como $O(n)$, sendo $n$ o tamanho bidimensional da matriz, ou seja, o produto entre a quantidade de linhas e colunas que ela possui.
 
-	Como foi detalhado na especificaÁ„o, a matriz foi modelada para ser alocada e desalocada din‚micamente, atravÈs dos comandos \textit{malloc} e \textit{free}. Para confirmar que este processo de alocaÁ„o din‚mica de memÛria estava ocorrendo como esperado, foi utilizado o comando \textit{valgrind} para verificar qualquer tipo de vazamento de memÛria.
+	Como foi detalhado na especifica√ß√£o, a matriz foi modelada para ser alocada e desalocada din√¢micamente, atrav√©s dos comandos \textit{malloc} e \textit{free}. Para confirmar que este processo de aloca√ß√£o din√¢mica de mem√≥ria estava ocorrendo como esperado, foi utilizado o comando \textit{valgrind} para verificar qualquer tipo de vazamento de mem√≥ria.
 
-\section{SOLU«√O PROPOSTA}
+\section{SOLU√á√ÉO PROPOSTA}
 \label{solucao_proposta}
 
-	O problema que deparamos È minimizar o custo de combustÌvel dos trens da empresa Atlanticon. Como j· modelamos nosso problema como um grafo, nada melhor que um algorÌtmo especÌfico que nos traga a soluÁ„o. A seguir uma definiÁ„o de \cite{sedgewick} para o problema de caminho mÌnimo:
+	O problema que deparamos √© minimizar o custo de combust√≠vel dos trens da empresa Atlanticon. Como j√° modelamos nosso problema como um grafo, nada melhor que um algor√≠tmo espec√≠fico que nos traga a solu√ß√£o. A seguir uma defini√ß√£o de \cite{sedgewick} para o problema de caminho m√≠nimo:
 
 	\begin{quote}
-	Dado um digrafo com custos n„o negativos nos arcos e um vÈrtice \textit{s}, encontrar uma arborescÍncia de caminhos mÌnimos com raiz \textit{s} no digrafo.
+	Dado um digrafo com custos n√£o negativos nos arcos e um v√©rtice \textit{s}, encontrar uma arboresc√™ncia de caminhos m√≠nimos com raiz \textit{s} no digrafo.
 	\end{quote}
 
-	O algoritmo que utilizaremos foi inventado por Edsger Dijkstra [a pron˙ncia È algo entre "DÍcstra"\ e "DÍicstra"] e publicado em 1959. O algoritmo pode ser usado, em particular, para encontrar um caminho de custo mÌnimo de um dado vÈrtice a outro \cite{sedgewick}.
+	O algoritmo que utilizaremos foi inventado por Edsger Dijkstra [a pron√∫ncia √© algo entre "D√™cstra"\ e "D√™icstra"] e publicado em 1959. O algoritmo pode ser usado, em particular, para encontrar um caminho de custo m√≠nimo de um dado v√©rtice a outro \cite{sedgewick}.
 
-	A soluÁ„o proposta aqui foi realizar o algoritmo de Dijkstra para cada vÈrtice do grafo, ent„o descobrir o menor caminho dentre todos os possÌveis para resolver nosso problema de distribuiÁ„o de produtos pelas linhas de trem.
+	A solu√ß√£o proposta aqui foi realizar o algoritmo de Dijkstra para cada v√©rtice do grafo, ent√£o descobrir o menor caminho dentre todos os poss√≠veis para resolver nosso problema de distribui√ß√£o de produtos pelas linhas de trem.
 
-	Para o \textbf{Cen·rio 1} utilizamos apenas as dist‚ncias entre as cidades como peso nas aretas para calcular o caminho mÌnimo entre os vÈrtices.
+	Para o \textbf{Cen√°rio 1} utilizamos apenas as dist√¢ncias entre as cidades como peso nas aretas para calcular o caminho m√≠nimo entre os v√©rtices.
 
-	J· no \textbf{Cen·rio 2}, para cada cidade, calculamos o produto entre a dist‚ncia das cidades com o volume de pedidos de cada uma. O menor produto resulta na nossa melhor escolha.
+	J√° no \textbf{Cen√°rio 2}, para cada cidade, calculamos o produto entre a dist√¢ncia das cidades com o volume de pedidos de cada uma. O menor produto resulta na nossa melhor escolha.
 
-	No \textbf{Cen·rio 3}, temos que minimizar o valor de $X$, para isso inicialmente calculamos a maior dist‚ncia percorrida para cada cidade. Assim garantimos a quantidade de horas mÌnima para o pedido chegar. Dentre essas maiores dist‚ncias, escolhemos a menor delas, minimizando o valor de $X$.
+	No \textbf{Cen√°rio 3}, temos que minimizar o valor de $X$, para isso inicialmente calculamos a maior dist√¢ncia percorrida para cada cidade. Assim garantimos a quantidade de horas m√≠nima para o pedido chegar. Dentre essas maiores dist√¢ncias, escolhemos a menor delas, minimizando o valor de $X$.
 
-\subsection{FunÁıes e Algoritmos}
+	Al√©m desses cen√°rios, tempos que retornar qual o preju√≠zo percentual acarretado quando a cidade √© escolhida, de modo a garantir o menor tempo de entraga m√°ximo. Para isso calculamos a raz√£o entre os custos do \textbf{Cen√°rio 1} e \textbf{Cen√°rio 3}. Isso nos retorna qual a porcentagem de aumento de combust√≠vel caso a Atlanticon escolher a cidade do \textbf{Cen√°rio 3} para implantar a filial.
+
+\subsection{Principais fun√ß√µes implementadas}
 
 \subsubsection{Dijkstra}
 
-O produto de Kronecker consiste em uma operaÁ„o entre duas matrizes de dimensıes arbitr·rias que resulta em uma matriz de bloco. A ideia do algoritmo È que cada elementro da matriz \textbf{A} multiplique todos os elementos da matriz \textbf{B} gerando diversos blocos, que, eventualmente, ir„o gerar a matriz de blocos \textbf{C}.
+\begin{itemize}
+ \item \begin{large}\textit{void dijkstra (Grafo G, int v,  int *dis)}\end{large}\\
+ \subitem \textbf{Descri√ß√£o:} Soluciona o problema do caminho mais curto para o v√©rtice $v$ e armazena o resultado no vetor de dist√¢ncias dis.
+ \subitem \textbf{Par√¢metros:} Estrutura de grafo $G$, v√©rtice $v$ e vetor de dist√¢ncias $dis$.
+ \subitem \textbf{Complexidade:} $O(n^2)$, onde $n$ s√£o os v√©rtices do grafo.
+\end{itemize}
 
-A seguir uma definiÁ„o do produto de Kronecker \cite{schafer}:
-\begin{quote}
-Seja \textbf{A} uma matriz \textit{m x n} e \textbf{B} uma matriz \textit{p x q}, o produto de Kronecker \textbf{C} = \textbf{A} $\bigotimes$  \textbf{B}, tambÈm conhecido como produto tensorial, È uma matriz $(mp) * (nq)$, a qual elementos s„o definidos como:
-	\\
-	\\
-	$
-	c_{\alpha\beta} = a_{ij}b_{kl}, \\
-	$
-	\\
-	onde \\
-	\\
-	$
-	\alpha = p (i - 1) + k \\
-	\\
-	\beta = q (j - 1) + l.
-	$
-	\\
-\end{quote}
+\vspace{0.2 true cm}
 
-Uma ˙nica diferenÁa em relaÁ„o ‡ definiÁ„o do produto de Kronecker de \cite{schafer}, foi a posiÁ„o do resultado na matriz \textbf{C} do produto de dois valores das matrizes \textbf{A} e \textbf{B}. Como na nossa situaÁ„o, o primeiro elemento se encontra na posiÁ„o \textit{(0,0)}, e n„o \textit{(1,1)}, como esperado, ent„o a posiÁ„o do elemento na matriz \textbf{C} teve de ser alterada para o seguinte:
-
-\begin{quote}
-
-	$
-	c_{\alpha\beta} = a_{ij}b_{kl}, \\
-	$
-	\\
-	onde \\
-	\\
-	$
-	\alpha = (p * i + k) - 1 \\
-	\\
-	\beta = (q * j + l) - 1.
-	$
-	\\
+\begin{itemize}
+ \item \begin{large}\textit{void dijkstra\_all (Grafo G)}\end{large}\\
+ \subitem \textbf{Descri√ß√£o:} Soluciona o problema do caminho mais curto para todos os v√©rtices do grafo e atualiza a matriz de adjac√™ncia contida no grafo transformando-a em uma matriz de dist√¢ncias m√≠nimas.
+ \subitem \textbf{Par√¢metros:} Estrutura de grafo $G$.
+ \subitem \textbf{Complexidade:} $O(n^3)$, onde $n$ s√£o os v√©rtices do grafo.
+\end{itemize}
 
 
-\end{quote}
+\subsubsection{Consultoria}
 
-O algoritmo percorre as linhas e colunas da matriz \textbf{A} e da matriz \textbf{B} para realizar todas as operaÁıes. Ent„o, podemos definir que sua complexidade ter· um limite superior de $O(n^4)$.
+\begin{itemize}
+ \item \begin{large}\textit{int cenarioUm(Grafo G)}\end{large}\\
+ \subitem \textbf{Descri√ß√£o:} Pesquisa no grafo $G$, que agora cont√©m uma matriz de dist√¢ncias m√≠nimas, para descobrir qual cidade possui o menor caminho a ser percorrido pelo grafo. Retorna o √≠ndice da melhor cidade.
+ \subitem \textbf{Par√¢metros:} Estrutura de grafo $G$.
+ \subitem \textbf{Complexidade:} $O(n^2)$, onde $n$ s√£o os v√©rtices do grafo.
+\end{itemize}
 
-\section{IMPLEMENTA«√O}
+\vspace{0.2 true cm}
+
+\begin{itemize}
+ \item \begin{large}\textit{int cenarioDois(Grafo G)}\end{large}\\
+ \subitem \textbf{Descri√ß√£o:} Vasculha o grafo $G$, que agora cont√©m uma matriz de dist√¢ncias m√≠nimas, para descobrir qual cidade possui o menor caminho a ser percorrido pelo grafo. Por√©m, agora considerando o volume m√©dio de pedidos de cada cidade. Retorna o √≠ndice da melhor cidade.
+ \subitem \textbf{Par√¢metros:} Estrutura de grafo $G$.
+ \subitem \textbf{Complexidade:} $O(n^2)$, onde $n$ s√£o os v√©rtices do grafo.
+\end{itemize}
+
+\vspace{0.2 true cm}
+
+\begin{itemize}
+ \item \begin{large}\textit{int cenarioTres(Grafo G)}\end{large}\\
+ \subitem \textbf{Descri√ß√£o:} Caminha pelo grafo $G$, que agora cont√©m uma matriz de dist√¢ncias m√≠nimas, para descobrir qual o menor caminho dentre os maiores caminhos percorridos de cada cidade. Retorna o √≠ndice da melhor cidade.
+ \subitem \textbf{Par√¢metros:} Estrutura de grafo $G$.
+ \subitem \textbf{Complexidade:} $O(n^2)$, onde $n$ s√£o os v√©rtices do grafo.
+\end{itemize}
+
+\vspace{0.2 true cm}
+
+\begin{itemize}
+ \item \begin{large}\textit{float prejuizoCen3(Grafo G, int cen1, int cen3)}\end{large}\\
+ \subitem \textbf{Descri√ß√£o:} Calcula o custo do cen√°rio 1 para a cidade de √≠ndice $cen1$ e do cen√°rio 3 para a cidade de √≠ndice $cen3$. Depois √© calculado a raz√£o entre esses custos e esse √© o preju√≠zo de se escolher o cen√°rio 3 em vez do 1. O valor retornado √© um $float$ contendo o preju√≠zo em porcentagem.
+ \subitem \textbf{Par√¢metros:} Estrutura de grafo $G$, √≠ndice da cidade do cen√°rio 1 $cen1$, √≠ndice da cidade do cen√°rio 3 $cen3$.
+ \subitem \textbf{Complexidade:} $O(n)$, onde $n$ s√£o os v√©rtices do grafo.
+\end{itemize}
+
+
+\section{IMPLEMENTA√á√ÉO}
 \label{implementacao}
 
-\subsection{CÛdigo}
+\subsection{C√≥digo}
 
 \subsubsection{Arquivos .c}
 
 \begin{itemize}
-\item \textbf{tp0.c} Arquivo principal do progrma, lÍ todas as inst‚ncias de matrizes do arquivo de entrada, realiza o produto de Kronecker e insere cada resultado no arquivo de saÌda.
-\item \textbf{matriz.c} ContÈm todas as funÁıes de manipulaÁ„o, leitura e escrita de matrizes.
-\item \textbf{kronecker.c} ContÈm a funÁ„o que efetivamente calcula o produto de Kronecker.
-\item \textbf{arquivos.c} Um tipo abstrado de dados de manipulaÁ„o de arquivos, contendo funÁıes de abertura, leitura, escrita e fechamento.
+\item \textbf{tp1.c} Arquivo principal do progrma, l√™ todas as inst√¢ncias de problemas do arquivo de entrada, realiza os c√°lculos dos cen√°rios e insere cada resultado no arquivo de sa√≠da.
+\item \textbf{matriz.c} Cont√©m todas as fun√ß√µes de manipula√ß√£o, leitura e escrita de matrizes.
+\item \textbf{grafos\_matriz.c} Cont√©m todas as fun√ß√µes de manipula√ß√£o, leitura e escrita de grafos. Utiliza o TAD de matriz como implementa√ß√£o da matriz de adjac√™ncias.
+\item \textbf{dijkstra.c} Cont√©m a implementa√ß√£o do algoritmo de Dijkstra, tanto para um v√©rtice quanto para todos os v√©rtices do grafo.
+\item \textbf{consultoria.c} Cont√©m a implementa√ß√£o de todos os cen√°rios que a Atlanticon estabeleceu.
 \end{itemize}
 
 \subsubsection{Arquivos .h}
 
 \begin{itemize}
-\item \textbf{matriz.h} Biblioteca que define as funÁıes relativas ‡ matrizes, alÈm de definir a estrutura que È utilizada a todo momento.
-\item \textbf{kronecker.h} Biblioteca que define a funÁ„o que calcula o produto de Kronecker.
-\item \textbf{arquivos.h} DefiniÁ„o da das funÁıes utilizadas para ler, escrever e fechar corretamente um arquivo.
+\item \textbf{matriz.h} Al√©m de definir a estrutura de matriz, cont√©m o cabe√ßalho todas as fun√ß√µes de manipula√ß√£o, leitura e escrita de matrizes.
+\item \textbf{grafos\_matriz.h} Al√©m de definir a estrutura de grafos, cont√©m todas as fun√ß√µes de manipula√ß√£o, leitura e escrita de grafos. Utiliza o TAD de matriz como implementa√ß√£o da matriz de adjac√™ncias.
+\item \textbf{dijkstra.h} Cont√©m o cabe√ßalho do algoritmo de Dijkstra, tanto para um v√©rtice quanto para todos os v√©rtices do grafo.
+\item \textbf{consultoria.h} Cont√©m o cabe√ßalho de todos os cen√°rios que a Atlanticon estabeleceu.
 \end{itemize}
 
-\subsection{CompilaÁ„o}
+\subsection{Compila√ß√£o}
 
-O programa deve ser compilado atravÈs do compilador GCC atravÈs de um makefile ou do seguinte comando:
+O programa deve ser compilado atrav√©s do compilador GCC atrav√©s de um makefile ou do seguinte comando:
 
 \begin{footnotesize}
-\begin{verbatim} gcc -Wall -Lsrc src/tp0.c src/matriz.c src/kronecker.c src/arquivos.c -o tp0 \end{verbatim}
+\begin{verbatim} gcc -Wall -Lsrc src/tp1.c src/arquivos.c src/grafos_matriz.c src/matriz.c src/dijkstra.c src/consultoria.c -o tp1 \end{verbatim}
 \end{footnotesize}
 
-\subsection{ExecuÁ„o}
+Ou atrav√©s do comando $make$.
 
-A execuÁ„o do programa tem como par‚metros:
+\subsection{Execu√ß√£o}
+
+A execu√ß√£o do programa tem como par√¢metros:
 \begin{itemize}
-\item Um arquivo de entrada contendo v·rias inst‚ncias de matrizes.
-\item Um arquivo de saÌda que ir· receber o resultado do produto de Kronecker de cada inst‚ncia de matriz.
+\item Um arquivo de entrada contendo v√°rias inst√¢ncias de grafos e seus respectivos volumes de pedidos pra cada cidade.
+\item Um arquivo de sa√≠da que ir√° receber o resultado dos c√°lculos de cada cen√°rio e o percentual de preju√≠zo, j√° explicado na Se√ß√£o~\ref{solucao_proposta}.
 \end{itemize}
 
-O comando para a execuÁ„o do programa È da forma:
+O comando para a execu√ß√£o do programa √© da forma:
 
 \begin{footnotesize}
-\begin{verbatim} ./tp0 <arquivo_de_entrada> <arquivo_de_saÌda>\end{verbatim}
+\begin{verbatim} ./tp1 <arquivo_de_entrada> <arquivo_de_sa√≠da>\end{verbatim}
 \end{footnotesize}
 
 \subsubsection{Formato da entrada}
 
-A primeira linha do arquivo de entrada contÈm o valor \textit{k} de inst‚ncias (pares de matrizes) que o arquivo contÈm. A prÛxima linha contÈm as dimensıes \textit{m} e \textit{n} da matriz $A_1$. As prÛximas \textit{m} linhas contÈm os elementos de cada linha de de $A_1$ separados por um espaÁo. Em seguida, as dimensıes e os elementos da matriz $B_1$ s„o especificadas da mesma forma. E assim sucessivamente nas inst‚ncias seguintes.
+A primeira linha do arquivo de entrada cont√©m o valor \textit{k} de inst√¢ncias que o arquivo cont√©m. A pr√≥xima linha cont√©m a quantidade \textit{n} de cidades que o grafo cont√©m. As pr√≥ximas \textit{m} linhas cont√©m a matriz de adjac√™ncia referente √† esse grafo. Por √∫ltimo, a √∫ltima linha cont√©m \textit{n} inteiros que s√£o referentes ao volume m√©dio de pedidos de cada cidade da regi√£o.
 
-	A seguir dois pares de matrizes de exemplo:
-\begin{center}
-	\begin{tabular}{lr}
+A Figura~\ref{grafo} cont√©m um grafo com 5 cidades, bem conectado. Geramos um arquivo que cont√©m a matriz de adjac√™ncia dele e o volume de pedidos de cada cidade. Esse arquivo de entrada tem a seguinte configura√ß√£o:
 
-	$
-	A_1 =
-	\begin{bmatrix}
-	3 & 7 & 4
-	\end{bmatrix}
-	$
-	&
-	$
-	B_1 =
-	\begin{bmatrix}
-	0 \\
-	7 \\
-	6 \\
-	\end{bmatrix}
-	$
-	\\
-	\\
-	$
-	A_2 =
-	\begin{bmatrix}
-	6
-	\end{bmatrix}
-	$
-	&
-	$
-	B_2 =
-	\begin{bmatrix}
-	6 \\
-	6
-	\end{bmatrix}
-	$
-	\end{tabular}
-\end{center}
-Esse arquivo de entrada tem a seguinte configuraÁ„o:
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.8\textwidth]{graph_teste.png}
+	\caption{Grafo com 5 cidades}
+	\label{grafo}
+\end{figure}
+
 
 \begin{verbatim}
-2
-1 3
-3 7 4
-3 1
-0
+1
 7
-6
-1 1
-6
-2 1
-6
-6
+0 4 2 0 4 0 1
+4 0 5 0 7 0 0
+2 5 0 0 4 8 6
+0 0 0 0 3 0 0
+4 7 4 3 0 7 0
+0 0 8 0 7 0 0
+1 0 6 0 0 0 0
+217 730 272 684 339 890 356
 \end{verbatim}
 
-\subsubsection{Formato da saÌda}
+\subsubsection{Formato da sa√≠da}
 
-O arquivo de saÌda tem a mesma configuraÁ„o, sendo a primeira linha o valor \textit{k}, seguido das \textit{k} matrizes.
+O arquivo de sa√≠da cont√©m 3 inteiros e um valor de ponto flutuante. Cada inteiro √© um identificador da cidade na qual a filial deve ser instalado considerando cada um dos cen√°rios descritos na Se√ß√£o~\ref{solucao_proposta}. O √∫ltimo valor consiste no aumento percentual ao se escolher a cidade de modo a minimizar o tempo m√°ximo de entrega ao inv√©s de minimizar o gasto total de combust√≠vel.
 
-A seguir o resultado do produto de Kronecker das inst‚ncias de matrizes definidas anteriormente:
-\begin{center}
-	\begin{tabular}{lr}
-
-	$
-	C_1 =
-	\begin{bmatrix}
-	0 & 0 & 0 \\
-	21 & 49 & 28 \\
-	18 & 42 & 24
-	\end{bmatrix}
-	$
-	&
-	$
-	C_2 =
-	\begin{bmatrix}
-	36 \\
-	36
-	\end{bmatrix}
-	$
-
-	\end{tabular}
-\end{center}
-
-Esse arquivo de saÌda tem a seguinte configuraÁ„o:
+Considerando o grafo da Figura~\ref{grafo}, o resultado obtido ap√≥s a execu√ß√£o do programa √© escrito no arquivo de sa√≠da, que tem a seguinte configura√ß√£o:
 
 \begin{verbatim}
-2
-3 3
-0 0 0
-21 49 28
-18 42 24
-2 1
-36
-36
+1 5 5 7.14
 \end{verbatim}
 
 
-\section{AVALIA«√O EXPERIMENTAL}
+\section{AVALIA√á√ÉO EXPERIMENTAL}
 \label{avaliacao_experimental}
 
-Foram gerados arquivos de v·rios tipos para testar, depois foi usado o comando \textit{time} para calcular o tempo de execuÁ„o de cada configuraÁ„o de teste diferente. Nas prÛximas duas subseÁıes vamos detalhar os scripts que foram criados para gerar esses arquivos de testes, alÈm de demonstrar os resultados de cada teste.
-
-\subsection{Scripts}
-Primeiro, foi criado um script, em Python, para gerar arquivos de entrada para o trabalho. Esse programa recebe como par‚metro o n˙mero de inst‚ncias a ser criado e o n˙mero m·ximo de linhas e colunas que essas matrizes ter„o.
-
-Posteriormente foi feito outro script para gerar um lote de arquivos de entrada e j· armazenar o tempo de processamento de cada um.
-
-Primeiro, o script que gera o arquivo de entrada:\\
-
-\begin{python}
-
-import random,sys
-
-k = int(sys.argv[1]) # pares de matrizes
-maxX = int(sys.argv[2]) # tamanho m·ximo de linhas da matriz
-maxY = int(sys.argv[3]) # tamanho m·ximo de colunas da matriz
-
-print k
-
-for i in range(k)*2: # Multiplica por 2 pois s„o pares de matrizes
-    m = maxX
-    n = maxY
-    print m,n
-    for j in range(m):
-        for l in range(n):
-            print random.randint(0,100),
-        print ''
-
-\end{python}
-
-Segundo, o script que utiliza o primeiro para fazer um \textit{batch} de testes:\\
-
-\begin{python}
-
-import sys,os,random
-
-ent = 'entrada/'
-sai = 'saida/'
-tempo = 'tempo/'
-script = './testes/entrada.py '
-arqAppend = ' >> '
-arqNew = ' > '
-
-
-for i in range(100):
-	i+=1
-	i*=5
-	#teste1 = script+' 1 '+str(i)+' '+str(i)+' ' # Matrizes quadradas
-	#teste2 = script+' 1 10 '+str(i) # linhas fixas em 10
-	#teste3 = script+' 1 '+str(i)+' 10' # colunas fixas em 10
-	teste = script+' '+str(i)+' 50 50' # linhas e colunas fixas em 50 + n∫ de inst‚ncias variando
-	arqEnt= 'ent'+str(i)+'.txt'
-	arqSai= 'sai'+str(i)+'.txt'
-	arqTmp= 'tmp'+str(i)+'.txt'
-	os.system(teste+arqNew+ent+arqEnt)
-	os.system('/usr/bin/./time -o '+tempo+arqTmp+' ./tp0 '+arqEnt+' '+arqSai)
-
-
-\end{python}
 
 \subsection{Resultado}
 
-	O primeiro teste realizado foi o seguinte: foi fixado o n˙mero de linhas e colunas das matrizes para 50. Ou seja, cada matriz tinha $2.500$ elementos, e as matrizes resultado tinham $6.250.000$ elementos cada uma.
+	O primeiro teste realizado foi o seguinte: foi fixado o n√∫mero de linhas e colunas das matrizes para 50. Ou seja, cada matriz tinha $2.500$ elementos, e as matrizes resultado tinham $6.250.000$ elementos cada uma.
 
-	Na Figura \ref{instancias}, podemos ver que o tempo de processamento cresceu de uma maneira esperada. Como a complexidade do algoritmo È definida basicamente pelo tamanho das matrizes, ent„o uma variaÁ„o do n˙mero de inst‚ncias resulta em um crescimento praciamente constante no tempo de processamento do programa.
+	Na Figura \ref{instancias}, podemos ver que o tempo de processamento cresceu de uma maneira esperada. Como a complexidade do algoritmo √© definida basicamente pelo tamanho das matrizes, ent√£o uma varia√ß√£o do n√∫mero de inst√¢ncias resulta em um crescimento praciamente constante no tempo de processamento do programa.
 
 \begin{figure}[p!]
 	\centering
@@ -379,7 +275,7 @@ for i in range(100):
 	\label{instancias}
 \end{figure}
 
-	Na Figura \ref{quadradas} foi feito um teste com matrizes quadradas. Tanto a matriz \textbf{A}, quanto a matriz \textbf{B} variaram o tamanho de $ 1 * 1 $ para $ 100 * 100 $. Ou seja, num momento tinham apenas um elemento e no ˙ltimo tinham $10.000$ elementos. A matriz \textbf{C}, no final desse teste, possuÌa $100.000.000$ elementos. O tempo de processamento aqui j· cresceu de maneira exponencial, como era de se esperar por causa da complexidade exponencial do produto de Kronecker.
+	Na Figura \ref{quadradas} foi feito um teste com matrizes quadradas. Tanto a matriz \textbf{A}, quanto a matriz \textbf{B} variaram o tamanho de $ 1 * 1 $ para $ 100 * 100 $. Ou seja, num momento tinham apenas um elemento e no √∫ltimo tinham $10.000$ elementos. A matriz \textbf{C}, no final desse teste, possu√≠a $100.000.000$ elementos. O tempo de processamento aqui j√° cresceu de maneira exponencial, como era de se esperar por causa da complexidade exponencial do produto de Kronecker.
 
 
 \begin{figure}[p!]
@@ -389,9 +285,9 @@ for i in range(100):
 	\label{quadradas}
 \end{figure}
 
-	Os ˙ltimos dois testes foram configurados da seguinte maneira: fixamos as colunas e variamos as linhas e vice-versa.
+	Os √∫ltimos dois testes foram configurados da seguinte maneira: fixamos as colunas e variamos as linhas e vice-versa.
 
-No primeiro, Figura \ref{linhas}, fixamos as colunas das matrizes em $10$ e variamos as linhas atÈ $500$, ou seja, a matriz \textbf{C} comeÁou com tamanho $1 * 100$ ($100$ elementos) e terminou com um tamanho de $250.000 * 100$ ($25.000.000$ elementos); no segundo, Figura \ref{colunas}, fixamos as linhas das matrizes em $10$ e variamos as colunas atÈ $500$. O tempo de processamento desses testes se encontra nas figuras abaixo:
+No primeiro, Figura \ref{linhas}, fixamos as colunas das matrizes em $10$ e variamos as linhas at√© $500$, ou seja, a matriz \textbf{C} come√ßou com tamanho $1 * 100$ ($100$ elementos) e terminou com um tamanho de $250.000 * 100$ ($25.000.000$ elementos); no segundo, Figura \ref{colunas}, fixamos as linhas das matrizes em $10$ e variamos as colunas at√© $500$. O tempo de processamento desses testes se encontra nas figuras abaixo:
 
 \begin{figure}[p!]
 	\centering
@@ -407,16 +303,16 @@ No primeiro, Figura \ref{linhas}, fixamos as colunas das matrizes em $10$ e vari
 	\label{colunas}
 \end{figure}
 
-\section{CONCLUS√O}
+\section{CONCLUS√ÉO}
 \label{conclusao}
 
-	O problema de calcular o produto de Kronecker das matriz foi solucionado sem muitas complicaÁıes. As matrizes foram alocadas din‚micamente com sucesso, de acordo com o \textit{Valgrind}. AlÈm disso, um padr„o de cÛdigo bem modularizado foi seguido, para que os mÛdulos possam ser reutilizados futuramente.
+	O problema de calcular o produto de Kronecker das matriz foi solucionado sem muitas complica√ß√µes. As matrizes foram alocadas din√¢micamente com sucesso, de acordo com o \textit{Valgrind}. Al√©m disso, um padr√£o de c√≥digo bem modularizado foi seguido, para que os m√≥dulos possam ser reutilizados futuramente.
 
-	O cÛdigo tambÈm j· foi construÌdo de uma maneira em que, caso futuramente seja necess·rio paraleliz·-lo, poucas mudanÁas no cÛdigo precisar„o ser feitas para tal.
+	O c√≥digo tamb√©m j√° foi constru√≠do de uma maneira em que, caso futuramente seja necess√°rio paraleliz√°-lo, poucas mudan√ßas no c√≥digo precisar√£o ser feitas para tal.
 
-	Os testes foram bem sucedidos pois o tempo de processamento do algoritmo em diversas situaÁıes ocorreu como esperado.
+	Os testes foram bem sucedidos pois o tempo de processamento do algoritmo em diversas situa√ß√µes ocorreu como esperado.
 
-	As primitivas b·sicas da linguagem C, como alocaÁ„o din‚mica de memÛria e manipulaÁ„o de arquivos, foram bem exploradas no trabalho pr·tico. AlÈm disso, procurei construir uma documentaÁ„o bem detalhada sobre toda a estrutura e funcionamento do programa implementado.
+	As primitivas b√°sicas da linguagem C, como aloca√ß√£o din√¢mica de mem√≥ria e manipula√ß√£o de arquivos, foram bem exploradas no trabalho pr√°tico. Al√©m disso, procurei construir uma documenta√ß√£o bem detalhada sobre toda a estrutura e funcionamento do programa implementado.
 
 \bibliographystyle{sbc}
 \bibliography{tp1}
