@@ -8,13 +8,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h> //memset
 #include <limits.h> // INT_MAX
 #include "grafos_matriz.h"
 
 #define INF INT_MAX
-
-
 
 int * dijkstra (Grafo G, int v){
 
@@ -56,11 +53,7 @@ int * dijkstra (Grafo G, int v){
 }
 
 
-
 void dijkstra_all (Grafo G){
-
-    Matriz M;
-    criaMatriz(G.N,G.N,&M);
 
     for (int v=0; v < G.N; v++){
         int *dis = (int *) malloc(G.N * (sizeof(int)));
@@ -68,13 +61,12 @@ void dijkstra_all (Grafo G){
         dis = dijkstra(G,v);
 
         for (int i=0;i<G.N;i++){
-            M.matriz[v][i] = dis[i];
+            G.matrizAdj.matriz[v][i] = dis[i];
 
         }
 
     }
 
-    imprimeMatriz(M);
 
 
 }
