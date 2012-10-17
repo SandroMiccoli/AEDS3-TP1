@@ -15,6 +15,7 @@
 #include "grafos_matriz.h"
 #include "matriz.h"
 #include "dijkstra.h"
+#include "consultoria.h"
 
 int main(int argc, char *argv[]){
 
@@ -49,6 +50,9 @@ int main(int argc, char *argv[]){
             inicializaGrafo(inp, &G);
 
             dijkstra_all(G);
+
+            printf("CEN 1: %d\n",cenarioUm(G));
+            printf("CEN 2: %d\n",cenarioDois(G));
 
             freeGrafo(G);
         }
