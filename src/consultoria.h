@@ -24,7 +24,7 @@
         Identificador da cidade na qual a filial deve ser instalada para minimizar o
         valor X do serviço de entrega rápida.
 
-    Cenário 4
+    Identificador 4
         Prejuízo percentual acarretado quando a cidade é escolhida de modo a garantir o menor tempo
         de entrega máximo.
 
@@ -61,8 +61,8 @@ int cenarioDois(Grafo G);
 int cenarioTres(Grafo G);
 
 /*
-    Cenário 4
-        Prejuízo percentual acarretado quando a cidade é escolhida de modo a garantir o menor tempo
+    Identificador 4
+        Prejuízo percentual acarretado quando a cidade 3 é escolhida de modo a garantir o menor tempo
         de entrega máximo.
 */
-float cenarioQuatro(Grafo G, int cen1, int cen3);
+float prejuizoCen3(Grafo G, int cen1, int cen3);

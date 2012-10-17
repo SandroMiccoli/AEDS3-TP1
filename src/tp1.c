@@ -47,7 +47,7 @@ int main(int argc, char *argv[]){
             cidade_cen_1 = cenarioUm(G);
             cidade_cen_2 = cenarioDois(G);
             cidade_cen_3 = cenarioTres(G);
-            prejuizo     = cenarioQuatro(G,cidade_cen_1,cidade_cen_3);
+            prejuizo     = prejuizoCen3(G,cidade_cen_1,cidade_cen_3);
 
             fprintf(out,"%d ",cidade_cen_1);
             fprintf(out,"%d ",cidade_cen_2);

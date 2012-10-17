@@ -10,7 +10,7 @@
 #define DIJKSTRA_H_
 
 // Calcula o Dijkstra para o vértice v
-void dijkstra (Grafo G, int v);
+void dijkstra (Grafo G, int v, int *dis);
 
 //
 // Realiza o Dijkstra para cada vértice do grafo
