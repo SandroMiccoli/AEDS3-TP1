@@ -12,8 +12,7 @@
 #include "grafos_matriz.h"
 
 #define INF INT_MAX
-
-int * dijkstra (Grafo G, int v){
+void dijkstra (Grafo G, int v, int *dis){
 
         // vetor responsável para indicar se o vértice 'i' já foi visitado ou não
         char vis[G.N];
@@ -22,7 +21,7 @@ int * dijkstra (Grafo G, int v){
             vis[i]=0;
 
         // Vetor de distâncias
-        int dis[G.N];
+        //int dis[G.N]; // Agora passado por parâmetro
         // seta todos como infinito
         for (int i=0; i < G.N; i++)
             dis[i]=INF;
@@ -48,17 +47,17 @@ int * dijkstra (Grafo G, int v){
                                 dis[i] = dis[n] + G.matrizAdj.matriz[n][i];
         }
 
-        return dis;
+       // return dis;
 
 }
 
 
 void dijkstra_all (Grafo G){
+    int *dis = (int *) malloc(G.N * (sizeof(int)));
 
     for (int v=0; v < G.N; v++){
-        int *dis = (int *) malloc(G.N * (sizeof(int)));
 
-        dis = dijkstra(G,v);
+        dijkstra(G,v,dis);
 
         for (int i=0;i<G.N;i++){
             G.matrizAdj.matriz[v][i] = dis[i];
@@ -67,6 +66,8 @@ void dijkstra_all (Grafo G){
 
     }
 
+
+    free(dis);
 
 
 }
