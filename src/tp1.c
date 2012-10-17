@@ -24,8 +24,9 @@ int main(int argc, char *argv[]){
 
         char entrada[40] = "entrada/";
         char saida[40] = "saida/";
-        int k,n; // Instâncias de matrizes
-        int dist;
+        int k; // Instâncias de matrizes
+        int cidade_cen_1,cidade_cen_2,cidade_cen_3;
+        float prejuizo;
 
         Grafo G;
 
@@ -37,23 +38,21 @@ int main(int argc, char *argv[]){
 
         fscanf(inp, "%d ", &k); // Lê as k instâncias de problemas
 
-        //fscanf(inp, "%d ", &n); // Lê as n cidades
-
-        //G = inicializaGrafo(n);
-
-        //Matriz matrizAdj;
-
-        printf("INSTANCIAS: %d\n\n",k);
-
         for (int l=0; l<k; l++){
 
             inicializaGrafo(inp, &G);
 
             dijkstra_all(G);
 
-            printf("CEN 1: %d\n",cenarioUm(G));
-            printf("CEN 2: %d\n",cenarioDois(G));
-            printf("CEN 3: %d\n",cenarioTres(G));
+            cidade_cen_1 = cenarioUm(G);
+            cidade_cen_2 = cenarioDois(G);
+            cidade_cen_3 = cenarioTres(G);
+            prejuizo     = cenarioQuatro(G,cidade_cen_1,cidade_cen_3);
+
+            printf("%d ",cidade_cen_1);
+            printf("%d ",cidade_cen_2);
+            printf("%d ",cidade_cen_3);
+            printf("%.2f\n",prejuizo);
 
             freeGrafo(G);
         }

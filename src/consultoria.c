@@ -24,7 +24,7 @@
         Identificador da cidade na qual a filial deve ser instalada para minimizar o
         valor X do serviço de entrega rápida.
 
-    Cenário 4
+    Identificador 4
         Prejuízo percentual acarretado quando a cidade é escolhida de modo a garantir o menor tempo
         de entrega máximo.
 
@@ -138,4 +138,27 @@ int cenarioTres(Grafo G){
 
     return cidade+1;
 
+}
+/*
+    Cenário 4
+        Prejuízo percentual acarretado quando a cidade é escolhida de modo a garantir o menor tempo
+        de entrega máximo.
+*/
+float cenarioQuatro(Grafo G, int cen1, int cen3){
+    float prejuizo=0;
+    int custoCen1 = 0, custoCen3 = 0;
+
+    // Recupera o custo do cenario 1
+    for (int i = 0; i < G.N; i++){
+        custoCen1 += G.matrizAdj.matriz[cen1-1][i];
+    }
+
+    // Recupera o custo do cenário 3
+    for (int i = 0; i < G.N; i++){
+        custoCen3 += G.matrizAdj.matriz[cen3-1][i];
+    }
+
+    prejuizo = (((float)custoCen3*100.0)/(float)custoCen1) - 100.0;
+
+    return prejuizo;
 }
