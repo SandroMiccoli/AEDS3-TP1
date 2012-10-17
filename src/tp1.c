@@ -49,15 +49,13 @@ int main(int argc, char *argv[]){
             cidade_cen_3 = cenarioTres(G);
             prejuizo     = cenarioQuatro(G,cidade_cen_1,cidade_cen_3);
 
-            printf("%d ",cidade_cen_1);
-            printf("%d ",cidade_cen_2);
-            printf("%d ",cidade_cen_3);
-            printf("%.2f\n",prejuizo);
+            fprintf(out,"%d ",cidade_cen_1);
+            fprintf(out,"%d ",cidade_cen_2);
+            fprintf(out,"%d ",cidade_cen_3);
+            fprintf(out,"%.2f\n",prejuizo);
 
             freeGrafo(G);
         }
-
-
 
         fechaArquivo(inp);
         fechaArquivo(out);
