@@ -14,6 +14,7 @@
 #include "arquivos.h"
 #include "grafos_matriz.h"
 #include "matriz.h"
+#include "dijkstra.h"
 
 int main(int argc, char *argv[]){
 
@@ -43,21 +44,17 @@ int main(int argc, char *argv[]){
 
         printf("INSTANCIAS: %d\n\n",k);
 
-        inicializaGrafo(inp, &G);
+        for (int l=0; l<k; l++){
 
-        //leMatriz(inp, &(G.matrizAdj)); // Lê matrizes do arquivo e as insere na variável de matrizAjd
+            inicializaGrafo(inp, &G);
 
-        imprimeMatriz(G.matrizAdj);
+            dijkstra_all(G);
+
+            freeGrafo(G);
+        }
 
 
-       for (int i = 0; i < G.N; i++){
-            printf("%d ",G.Vol[i]);
-       }
 
-        //insereAresta(G,i,j,dist);
-   //     imprimeGrafo(G);
-
-        destroiMatriz(&(G.matrizAdj));
         fechaArquivo(inp);
         fechaArquivo(out);
 

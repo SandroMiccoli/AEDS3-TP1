@@ -4,7 +4,7 @@ CFLAGS = -Wall -Lsrc
 
 RM = rm -f
 
-OBJS = src/tp1.c src/arquivos.c src/grafos_matriz.c src/matriz.c
+OBJS = src/tp1.c src/arquivos.c src/grafos_matriz.c src/matriz.c src/dijkstra.c
 
 VALGRIND = valgrind -v --read-var-info=yes --tool=memcheck --leak-check=yes --show-reachable=yes --track-origins=yes
 #VALGRIND = valgrind  --read-var-info=yes --tool=memcheck --leak-check=yes -v
