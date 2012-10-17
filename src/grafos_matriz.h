@@ -25,14 +25,11 @@ TODO:
 */
 
 // Estrutura básica de um grafo, contendo seu número de vértices, arestas e um ponteiro para sua matriz de adjacência.
-struct grafo {
+typedef struct grafo {
     Matriz matrizAdj;
     int N; // Quantidade de cidades no grafo
     int *Vol; // Volume de pedidos de cada cidade
-};
-
-// Um objeto Grafo contém o endereço de um grafo
-typedef struct grafo Grafo;
+} Grafo;
 
 // Inicializa grafo
 void inicializaGrafo(FILE * arquivo, Grafo * G);
