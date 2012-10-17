@@ -105,3 +105,37 @@ int cenarioDois(Grafo G){
     return cidade+1;
 
 }
+
+/*
+    Cenário 3
+        Identificador da cidade na qual a filial deve ser instalada para minimizar o
+        valor X do serviço de entrega rápida.
+
+*/
+int cenarioTres(Grafo G){
+
+    int maiorDist=INF; // Variável que representa a maior distância
+    int distAux;
+
+    int cidade; // Variável que representa a cidade que possui a menor distância dentre as maiores percorridas de todas as cidades
+
+    for (int i=0; i<G.N; i++){
+        distAux = 0;
+
+        // Descobre qual a cidade j de maior distância da a cidade i
+        for (int j=0; j<G.N; j++){
+            if (G.matrizAdj.matriz[i][j] > distAux)
+                distAux = G.matrizAdj.matriz[i][j];
+        }
+
+        // Armazena a menor dentre as maiores distâncias percorridas de cada cidade
+        if (distAux < maiorDist){
+            maiorDist = distAux;
+            cidade = i;
+        }
+    }
+
+
+    return cidade+1;
+
+}

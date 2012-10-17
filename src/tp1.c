@@ -53,6 +53,7 @@ int main(int argc, char *argv[]){
 
             printf("CEN 1: %d\n",cenarioUm(G));
             printf("CEN 2: %d\n",cenarioDois(G));
+            printf("CEN 3: %d\n",cenarioTres(G));
 
             freeGrafo(G);
         }
