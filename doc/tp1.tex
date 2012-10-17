@@ -23,6 +23,7 @@
 \usepackage[brazil]{babel}
 \usepackage[latin1]{inputenc}
 \usepackage{pythonhighlighting}
+\usepackage{listings}
 
 \usepackage{alltt}
 \renewcommand{\ttdefault}{txtt}
@@ -44,59 +45,76 @@
 \maketitle
 
 \begin{resumo}
-Esse relatório descreve como foi solucionado o problema . Será descrito também a modelagem do problema e a solução proposta para tal. Finalmente será detalhado a análise de complexidade dos algoritmos, os testes utilizados para comprovar tais análises e uma breve conclusão do trabalho implementado.
+Esse relatório descreve como foi foi solucionado o problema proposto no Trabalho Prático 1, o qual será detalhado ao longo das próximas seções. Será descrito também a modelagem do problema e a solução proposta para tal. Finalmente será detalhado a análise de complexidade dos algoritmos, os testes utilizados para comprovar tais análises e uma breve conclusão do trabalho implementado.
 
 \end{resumo}
 
 \section{INTRODUÇÃO}
 
-	O objetivo do trabalho é implementar um programa que receba várias instâncias de matrizes e retorne o produto de Kronecer de cada instância.
+	A situação que deparamos neste trabalho é a seguinte: a distribuidora de produtos, Atlanticon, está precisando de uma consultoria para decidir em qual cidade deve instalar a nova filial para servir uma daterminada região.
 
-	O produto de Kronecker, também conhecido como produto tensorial ou produto direto, consiste em uma operação entre duas matrizes de tamanhos abritrários resultando em uma matriz de bloco. Em outras palavras, essa matriz resultante pode ser seccionada em submatrizes.
+	A empresa possui conhecimento das distâncias entre quaisquer duas cidades da região que sejam conectadas por algum trilho. Além disso, o trem, precariamente, realiza a entrega de apenas um produto por viagem, tornando necessário retornar para a filial para carregar um novo produto.
 
-	O restante deste relatório é organizado da seguinte forma. A Seção~\ref{modelagem} descreve como foi feita a modelagem e manipulação das matrizes. A Seção \ref{solucao_proposta} descreve rapidamente qual foi a solução proposta além do método utilizado para gerar o produto tensorial entre as instâncias de matrizes. A Seção~\ref{implementacao} trata de detalhes específicos da implementação do trabalho: quais os arquivos utilizados; como é feita a compilação e execução; além de detalhar o formato dos arquivos de entrada e saída. A Seção~\ref{avaliacao_experimental} contém a avaliação experimental, quantificando o tempo de execução de cada operação com matrizes de diversos tamanhos. A Seção~\ref{conclusao} conclui o trabalho.
+	Existem 3 cenários distintos que a Atlanticon deseja saber qual a melhor opção de cidade para instalar a nova filial, e o objetivo do trabalho é solucionar esse problema.
+
+	Descreveremos aqui os três cenários:
+
+	\textbf{Cenário 1: } Escolher a cidade de modo a minimizar os custos de gasto em combustível. Considerando que cada cidade emite a mesma quantidade de pedidos em um mesmo intervalo de tempo.
+
+	\textbf{Cenário 2: } Escolher a cidade para também minimizar os custos de gasto em combustível. Porém, neste cenário cada cidade possui um volume diferente de pedidos, isso deve ser considerado para a escolha final.
+
+	\textbf{Cenário 3: } A Atlanticon deseja garantir que o produto seja entregue num prazo de $X$ horas. A escolha da cidade se dá pelo menor valor possível de $X$ que pudermos encontrar.
+
+	O restante deste relatório é organizado da seguinte forma. A Seção~\ref{modelagem} descreve como foi feita a modelagem e manipulação dos grafos. A Seção \ref{solucao_proposta} descreve rapidamente qual foi a solução proposta além do método utilizado para calcular as distâncias mínimas entre as cidades. A Seção~\ref{implementacao} trata de detalhes específicos da implementação do trabalho: quais os arquivos utilizados; como é feita a compilação e execução; além de detalhar o formato dos arquivos de entrada e saída. A Seção~\ref{avaliacao_experimental} contém a avaliação experimental, quantificando o tempo de execução de cada operação com grafos de diversos tamanhos e formatos. A Seção~\ref{conclusao} conclui o trabalho.
 
 
 \section{MODELAGEM}
 \label{modelagem}
 
-	Inicialmente, para trabalhar com matrizes, foi criada uma estrutura que contém a informação de quantas linhas e colunas a matriz tem, além de conter todos os elementos da matriz.
+	Inicialmente, para trabalhar com grafos, foi criada uma estrutura que contém a informação de quantos vértices o grafo possui, nesse caso, cidades, e qual o volume de pedidos de cada cidade:
 
-\begin{alltt}
+    \begin{lstlisting}[language=c]
+    typedef struct grafo {
+        Matriz matrizAdj;
+        int N; // Quantidade de cidades no grafo
+        int *Vol; // Volume de pedidos de cada cidade
+    } Grafo;
 
-\textbf{struct} \textbf{Matriz}{
-    \textbf{int} col, lin;
-    \textbf{int} ** matriz;
-} Matriz;
+    typedef struct Matriz{
+        int col, lin;
+        int ** matriz;
+    } Matriz;
 
-\end{alltt}
+    \end{lstlisting}
 
-	A complexidade dessa estrutura pode ser considerada como $O(n)$, sendo $n$ o tamanho bidimensional da matriz, ou seja, o produto entre a quantidade de linhas e colunas que ela possui.
+    Já que o grafo que nos é passado como entrada é uma matriz de adjacências, e como já havíamos implementado uma estrutura de matriz no Trabalho Prático 0, reutilizamos o código neste trabalho.
 
-	Como foi detalhado na especificação, a matriz foi modelada para ser alocada e desalocada dinâmicamente, através dos comandos \textit{malloc} e \textit{free}. Para confirmar que este processo de dinâmico de memória estava ocorrendo como esperado, foi utilizado o comando \textit{valgrind} para verificar qualquer tipo de vazamento de memória.
+	A complexidade de espaço dessa estrutura pode ser considerada como $O(n)$, sendo $n$ o tamanho bidimensional da matriz, ou seja, o produto entre a quantidade de linhas e colunas que ela possui.
 
-	Além disso, vários procedimentos foram criados para manipular as matrizes em um módulo específico. Essas funções são:
-\\
-\begin{description}
-  \item[criaMatriz] Cria a matriz
-  \item[mallocaMatriz]  Maloca todas as linhas e colunas da matriz
-  \item[destroiMatriz] Dá free em todos os vetores alocados pela matriz
-  \item[leMatrizes] Lê todas as matrizes do arquivo e as insere em um vetor de matriz
-  \item[preencheMatriz] Preenche a matriz m com os valores da matriz do arquivo.
-  \item[imprimeMatriz] Imprime todos os valores da matriz
-  \item[imprimeMatrizNoArquivo] Imprime todos os valores da matriz no arquivo
-\end{description}
+	Como foi detalhado na especificação, a matriz foi modelada para ser alocada e desalocada dinâmicamente, através dos comandos \textit{malloc} e \textit{free}. Para confirmar que este processo de alocação dinâmica de memória estava ocorrendo como esperado, foi utilizado o comando \textit{valgrind} para verificar qualquer tipo de vazamento de memória.
 
 \section{SOLUÇÃO PROPOSTA}
 \label{solucao_proposta}
 
-	A solução proposta aqui foi varrer o arquivo de entrada e armazenar todas as matrizes em um array. Posteriormente, esse array de matrizes é percorrido e, então, é calculado o produto de Kronecker entre cada instância. Por último, essas matrzies resultado são escritas no arquivo.
+	O problema que deparamos é minimizar o custo de combustível dos trens da empresa Atlanticon. Como já modelamos nosso problema como um grafo, nada melhor que um algorítmo específico que nos traga a solução. A seguir uma definição de \cite{sedgewick} para o problema de caminho mínimo:
 
-	Foi criado um módulo apenas para o produto de Kronecker. Este módulo possui apenas um procedimento, o \textbf{produtoKronecker}, que, efetivamente, calcula o produto tensorial entre duas matrizes e insere o resultado em um array.
+	\begin{quote}
+	Dado um digrafo com custos não negativos nos arcos e um vértice \textit{s}, encontrar uma arborescência de caminhos mínimos com raiz \textit{s} no digrafo.
+	\end{quote}
 
-\subsection{Algoritmos}
+	O algoritmo que utilizaremos foi inventado por Edsger Dijkstra [a pronúncia é algo entre "Dêcstra"\ e "Dêicstra"] e publicado em 1959. O algoritmo pode ser usado, em particular, para encontrar um caminho de custo mínimo de um dado vértice a outro \cite{sedgewick}.
 
-\subsubsection{Kronecker}
+	A solução proposta aqui foi realizar o algoritmo de Dijkstra para cada vértice do grafo, então descobrir o menor caminho dentre todos os possíveis para resolver nosso problema de distribuição de produtos pelas linhas de trem.
+
+	Para o \textbf{Cenário 1} utilizamos apenas as distâncias entre as cidades como peso nas aretas para calcular o caminho mínimo entre os vértices.
+
+	Já no \textbf{Cenário 2}, para cada cidade, calculamos o produto entre a distância das cidades com o volume de pedidos de cada uma. O menor produto resulta na nossa melhor escolha.
+
+	No \textbf{Cenário 3}, temos que minimizar o valor de $X$, para isso inicialmente calculamos a maior distância percorrida para cada cidade. Assim garantimos a quantidade de horas mínima para o pedido chegar. Dentre essas maiores distâncias, escolhemos a menor delas, minimizando o valor de $X$.
+
+\subsection{Funções e Algoritmos}
+
+\subsubsection{Dijkstra}
 
 O produto de Kronecker consiste em uma operação entre duas matrizes de dimensões arbitrárias que resulta em uma matriz de bloco. A ideia do algoritmo é que cada elementro da matriz \textbf{A} multiplique todos os elementos da matriz \textbf{B} gerando diversos blocos, que, eventualmente, irão gerar a matriz de blocos \textbf{C}.
 
