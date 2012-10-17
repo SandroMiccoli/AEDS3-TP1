@@ -1,0 +1,406 @@
+%	Documentação do Trabalho Prático 1 de AEDSIII
+%	@Sandro Miccoli
+%
+%	* Você pode identificar erros de grafia através do seguinte comando linux:
+%		aspell --encoding="iso8859-1" -c -t=tex --lang="pt_BR" tp0.tex
+%
+
+\documentclass[12pt]{article}
+\usepackage{sbc-template}
+\usepackage{graphicx}
+\usepackage{latexsym}
+\usepackage{subfigure}
+\usepackage{times,amsmath,epsfig}
+\usepackage{graphicx,url}
+ \makeatletter
+ \newif\if@restonecol
+ \makeatother
+ \let\algorithm\relax
+ \let\endalgorithm\relax
+\graphicspath{{./data/}}
+\usepackage[lined,algonl,ruled]{algorithm2e}
+\usepackage{multirow}
+\usepackage[brazil]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{pythonhighlighting}
+
+\usepackage{alltt}
+\renewcommand{\ttdefault}{txtt}
+
+\sloppy
+
+\title{TRABALHO PRÁTICO 1: \\ Grafos}
+
+\author{Sandro Miccoli - 2009052409 - smiccoli@dcc.ufmg.br}
+
+\address{Departamento de Ciência da Computação -- Universidade Federal de Minas Gerais (UFMG)\\
+\\
+\today
+}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{resumo}
+Esse relatório descreve como foi solucionado o problema . Será descrito também a modelagem do problema e a solução proposta para tal. Finalmente será detalhado a análise de complexidade dos algoritmos, os testes utilizados para comprovar tais análises e uma breve conclusão do trabalho implementado.
+
+\end{resumo}
+
+\section{INTRODUÇÃO}
+
+	O objetivo do trabalho é implementar um programa que receba várias instâncias de matrizes e retorne o produto de Kronecer de cada instância.
+
+	O produto de Kronecker, também conhecido como produto tensorial ou produto direto, consiste em uma operação entre duas matrizes de tamanhos abritrários resultando em uma matriz de bloco. Em outras palavras, essa matriz resultante pode ser seccionada em submatrizes.
+
+	O restante deste relatório é organizado da seguinte forma. A Seção~\ref{modelagem} descreve como foi feita a modelagem e manipulação das matrizes. A Seção \ref{solucao_proposta} descreve rapidamente qual foi a solução proposta além do método utilizado para gerar o produto tensorial entre as instâncias de matrizes. A Seção~\ref{implementacao} trata de detalhes específicos da implementação do trabalho: quais os arquivos utilizados; como é feita a compilação e execução; além de detalhar o formato dos arquivos de entrada e saída. A Seção~\ref{avaliacao_experimental} contém a avaliação experimental, quantificando o tempo de execução de cada operação com matrizes de diversos tamanhos. A Seção~\ref{conclusao} conclui o trabalho.
+
+
+\section{MODELAGEM}
+\label{modelagem}
+
+	Inicialmente, para trabalhar com matrizes, foi criada uma estrutura que contém a informação de quantas linhas e colunas a matriz tem, além de conter todos os elementos da matriz.
+
+\begin{alltt}
+
+\textbf{struct} \textbf{Matriz}{
+    \textbf{int} col, lin;
+    \textbf{int} ** matriz;
+} Matriz;
+
+\end{alltt}
+
+	A complexidade dessa estrutura pode ser considerada como $O(n)$, sendo $n$ o tamanho bidimensional da matriz, ou seja, o produto entre a quantidade de linhas e colunas que ela possui.
+
+	Como foi detalhado na especificação, a matriz foi modelada para ser alocada e desalocada dinâmicamente, através dos comandos \textit{malloc} e \textit{free}. Para confirmar que este processo de dinâmico de memória estava ocorrendo como esperado, foi utilizado o comando \textit{valgrind} para verificar qualquer tipo de vazamento de memória.
+
+	Além disso, vários procedimentos foram criados para manipular as matrizes em um módulo específico. Essas funções são:
+\\
+\begin{description}
+  \item[criaMatriz] Cria a matriz
+  \item[mallocaMatriz]  Maloca todas as linhas e colunas da matriz
+  \item[destroiMatriz] Dá free em todos os vetores alocados pela matriz
+  \item[leMatrizes] Lê todas as matrizes do arquivo e as insere em um vetor de matriz
+  \item[preencheMatriz] Preenche a matriz m com os valores da matriz do arquivo.
+  \item[imprimeMatriz] Imprime todos os valores da matriz
+  \item[imprimeMatrizNoArquivo] Imprime todos os valores da matriz no arquivo
+\end{description}
+
+\section{SOLUÇÃO PROPOSTA}
+\label{solucao_proposta}
+
+	A solução proposta aqui foi varrer o arquivo de entrada e armazenar todas as matrizes em um array. Posteriormente, esse array de matrizes é percorrido e, então, é calculado o produto de Kronecker entre cada instância. Por último, essas matrzies resultado são escritas no arquivo.
+
+	Foi criado um módulo apenas para o produto de Kronecker. Este módulo possui apenas um procedimento, o \textbf{produtoKronecker}, que, efetivamente, calcula o produto tensorial entre duas matrizes e insere o resultado em um array.
+
+\subsection{Algoritmos}
+
+\subsubsection{Kronecker}
+
+O produto de Kronecker consiste em uma operação entre duas matrizes de dimensões arbitrárias que resulta em uma matriz de bloco. A ideia do algoritmo é que cada elementro da matriz \textbf{A} multiplique todos os elementos da matriz \textbf{B} gerando diversos blocos, que, eventualmente, irão gerar a matriz de blocos \textbf{C}.
+
+A seguir uma definição do produto de Kronecker \cite{schafer}:
+\begin{quote}
+Seja \textbf{A} uma matriz \textit{m x n} e \textbf{B} uma matriz \textit{p x q}, o produto de Kronecker \textbf{C} = \textbf{A} $\bigotimes$  \textbf{B}, também conhecido como produto tensorial, é uma matriz $(mp) * (nq)$, a qual elementos são definidos como:
+	\\
+	\\
+	$
+	c_{\alpha\beta} = a_{ij}b_{kl}, \\
+	$
+	\\
+	onde \\
+	\\
+	$
+	\alpha = p (i - 1) + k \\
+	\\
+	\beta = q (j - 1) + l.
+	$
+	\\
+\end{quote}
+
+Uma única diferença em relação à definição do produto de Kronecker de \cite{schafer}, foi a posição do resultado na matriz \textbf{C} do produto de dois valores das matrizes \textbf{A} e \textbf{B}. Como na nossa situação, o primeiro elemento se encontra na posição \textit{(0,0)}, e não \textit{(1,1)}, como esperado, então a posição do elemento na matriz \textbf{C} teve de ser alterada para o seguinte:
+
+\begin{quote}
+
+	$
+	c_{\alpha\beta} = a_{ij}b_{kl}, \\
+	$
+	\\
+	onde \\
+	\\
+	$
+	\alpha = (p * i + k) - 1 \\
+	\\
+	\beta = (q * j + l) - 1.
+	$
+	\\
+
+
+\end{quote}
+
+O algoritmo percorre as linhas e colunas da matriz \textbf{A} e da matriz \textbf{B} para realizar todas as operações. Então, podemos definir que sua complexidade terá um limite superior de $O(n^4)$.
+
+\section{IMPLEMENTAÇÃO}
+\label{implementacao}
+
+\subsection{Código}
+
+\subsubsection{Arquivos .c}
+
+\begin{itemize}
+\item \textbf{tp0.c} Arquivo principal do progrma, lê todas as instâncias de matrizes do arquivo de entrada, realiza o produto de Kronecker e insere cada resultado no arquivo de saída.
+\item \textbf{matriz.c} Contém todas as funções de manipulação, leitura e escrita de matrizes.
+\item \textbf{kronecker.c} Contém a função que efetivamente calcula o produto de Kronecker.
+\item \textbf{arquivos.c} Um tipo abstrado de dados de manipulação de arquivos, contendo funções de abertura, leitura, escrita e fechamento.
+\end{itemize}
+
+\subsubsection{Arquivos .h}
+
+\begin{itemize}
+\item \textbf{matriz.h} Biblioteca que define as funções relativas à matrizes, além de definir a estrutura que é utilizada a todo momento.
+\item \textbf{kronecker.h} Biblioteca que define a função que calcula o produto de Kronecker.
+\item \textbf{arquivos.h} Definição da das funções utilizadas para ler, escrever e fechar corretamente um arquivo.
+\end{itemize}
+
+\subsection{Compilação}
+
+O programa deve ser compilado através do compilador GCC através de um makefile ou do seguinte comando:
+
+\begin{footnotesize}
+\begin{verbatim} gcc -Wall -Lsrc src/tp0.c src/matriz.c src/kronecker.c src/arquivos.c -o tp0 \end{verbatim}
+\end{footnotesize}
+
+\subsection{Execução}
+
+A execução do programa tem como parâmetros:
+\begin{itemize}
+\item Um arquivo de entrada contendo várias instâncias de matrizes.
+\item Um arquivo de saída que irá receber o resultado do produto de Kronecker de cada instância de matriz.
+\end{itemize}
+
+O comando para a execução do programa é da forma:
+
+\begin{footnotesize}
+\begin{verbatim} ./tp0 <arquivo_de_entrada> <arquivo_de_saída>\end{verbatim}
+\end{footnotesize}
+
+\subsubsection{Formato da entrada}
+
+A primeira linha do arquivo de entrada contém o valor \textit{k} de instâncias (pares de matrizes) que o arquivo contém. A próxima linha contém as dimensões \textit{m} e \textit{n} da matriz $A_1$. As próximas \textit{m} linhas contém os elementos de cada linha de de $A_1$ separados por um espaço. Em seguida, as dimensões e os elementos da matriz $B_1$ são especificadas da mesma forma. E assim sucessivamente nas instâncias seguintes.
+
+	A seguir dois pares de matrizes de exemplo:
+\begin{center}
+	\begin{tabular}{lr}
+
+	$
+	A_1 =
+	\begin{bmatrix}
+	3 & 7 & 4
+	\end{bmatrix}
+	$
+	&
+	$
+	B_1 =
+	\begin{bmatrix}
+	0 \\
+	7 \\
+	6 \\
+	\end{bmatrix}
+	$
+	\\
+	\\
+	$
+	A_2 =
+	\begin{bmatrix}
+	6
+	\end{bmatrix}
+	$
+	&
+	$
+	B_2 =
+	\begin{bmatrix}
+	6 \\
+	6
+	\end{bmatrix}
+	$
+	\end{tabular}
+\end{center}
+Esse arquivo de entrada tem a seguinte configuração:
+
+\begin{verbatim}
+2
+1 3
+3 7 4
+3 1
+0
+7
+6
+1 1
+6
+2 1
+6
+6
+\end{verbatim}
+
+\subsubsection{Formato da saída}
+
+O arquivo de saída tem a mesma configuração, sendo a primeira linha o valor \textit{k}, seguido das \textit{k} matrizes.
+
+A seguir o resultado do produto de Kronecker das instâncias de matrizes definidas anteriormente:
+\begin{center}
+	\begin{tabular}{lr}
+
+	$
+	C_1 =
+	\begin{bmatrix}
+	0 & 0 & 0 \\
+	21 & 49 & 28 \\
+	18 & 42 & 24
+	\end{bmatrix}
+	$
+	&
+	$
+	C_2 =
+	\begin{bmatrix}
+	36 \\
+	36
+	\end{bmatrix}
+	$
+
+	\end{tabular}
+\end{center}
+
+Esse arquivo de saída tem a seguinte configuração:
+
+\begin{verbatim}
+2
+3 3
+0 0 0
+21 49 28
+18 42 24
+2 1
+36
+36
+\end{verbatim}
+
+
+\section{AVALIAÇÃO EXPERIMENTAL}
+\label{avaliacao_experimental}
+
+Foram gerados arquivos de vários tipos para testar, depois foi usado o comando \textit{time} para calcular o tempo de execução de cada configuração de teste diferente. Nas próximas duas subseções vamos detalhar os scripts que foram criados para gerar esses arquivos de testes, além de demonstrar os resultados de cada teste.
+
+\subsection{Scripts}
+Primeiro, foi criado um script, em Python, para gerar arquivos de entrada para o trabalho. Esse programa recebe como parâmetro o número de instâncias a ser criado e o número máximo de linhas e colunas que essas matrizes terão.
+
+Posteriormente foi feito outro script para gerar um lote de arquivos de entrada e já armazenar o tempo de processamento de cada um.
+
+Primeiro, o script que gera o arquivo de entrada:\\
+
+\begin{python}
+
+import random,sys
+
+k = int(sys.argv[1]) # pares de matrizes
+maxX = int(sys.argv[2]) # tamanho máximo de linhas da matriz
+maxY = int(sys.argv[3]) # tamanho máximo de colunas da matriz
+
+print k
+
+for i in range(k)*2: # Multiplica por 2 pois são pares de matrizes
+    m = maxX
+    n = maxY
+    print m,n
+    for j in range(m):
+        for l in range(n):
+            print random.randint(0,100),
+        print ''
+
+\end{python}
+
+Segundo, o script que utiliza o primeiro para fazer um \textit{batch} de testes:\\
+
+\begin{python}
+
+import sys,os,random
+
+ent = 'entrada/'
+sai = 'saida/'
+tempo = 'tempo/'
+script = './testes/entrada.py '
+arqAppend = ' >> '
+arqNew = ' > '
+
+
+for i in range(100):
+	i+=1
+	i*=5
+	#teste1 = script+' 1 '+str(i)+' '+str(i)+' ' # Matrizes quadradas
+	#teste2 = script+' 1 10 '+str(i) # linhas fixas em 10
+	#teste3 = script+' 1 '+str(i)+' 10' # colunas fixas em 10
+	teste = script+' '+str(i)+' 50 50' # linhas e colunas fixas em 50 + nº de instâncias variando
+	arqEnt= 'ent'+str(i)+'.txt'
+	arqSai= 'sai'+str(i)+'.txt'
+	arqTmp= 'tmp'+str(i)+'.txt'
+	os.system(teste+arqNew+ent+arqEnt)
+	os.system('/usr/bin/./time -o '+tempo+arqTmp+' ./tp0 '+arqEnt+' '+arqSai)
+
+
+\end{python}
+
+\subsection{Resultado}
+
+	O primeiro teste realizado foi o seguinte: foi fixado o número de linhas e colunas das matrizes para 50. Ou seja, cada matriz tinha $2.500$ elementos, e as matrizes resultado tinham $6.250.000$ elementos cada uma.
+
+	Na Figura \ref{instancias}, podemos ver que o tempo de processamento cresceu de uma maneira esperada. Como a complexidade do algoritmo é definida basicamente pelo tamanho das matrizes, então uma variação do número de instâncias resulta em um crescimento praciamente constante no tempo de processamento do programa.
+
+\begin{figure}[p!]
+	\centering
+	\includegraphics[width=1\textwidth]{graph_inst.png}
+	\caption{A(50,50) B(50,50)}
+	\label{instancias}
+\end{figure}
+
+	Na Figura \ref{quadradas} foi feito um teste com matrizes quadradas. Tanto a matriz \textbf{A}, quanto a matriz \textbf{B} variaram o tamanho de $ 1 * 1 $ para $ 100 * 100 $. Ou seja, num momento tinham apenas um elemento e no último tinham $10.000$ elementos. A matriz \textbf{C}, no final desse teste, possuía $100.000.000$ elementos. O tempo de processamento aqui já cresceu de maneira exponencial, como era de se esperar por causa da complexidade exponencial do produto de Kronecker.
+
+
+\begin{figure}[p!]
+	\centering
+	\includegraphics[width=1\textwidth]{graph_quad.png}
+	\caption{Matrizes Quadradas A(x,x) B(x,x)}
+	\label{quadradas}
+\end{figure}
+
+	Os últimos dois testes foram configurados da seguinte maneira: fixamos as colunas e variamos as linhas e vice-versa.
+
+No primeiro, Figura \ref{linhas}, fixamos as colunas das matrizes em $10$ e variamos as linhas até $500$, ou seja, a matriz \textbf{C} começou com tamanho $1 * 100$ ($100$ elementos) e terminou com um tamanho de $250.000 * 100$ ($25.000.000$ elementos); no segundo, Figura \ref{colunas}, fixamos as linhas das matrizes em $10$ e variamos as colunas até $500$. O tempo de processamento desses testes se encontra nas figuras abaixo:
+
+\begin{figure}[p!]
+	\centering
+	\includegraphics[width=1\textwidth]{graph_lin.png}
+	\caption{Linhas - A(x,10) B(x,10)}
+	\label{linhas}
+\end{figure}
+
+\begin{figure}[p!]
+	\centering
+	\includegraphics[width=1\textwidth]{graph_col.png}
+	\caption{Colunas - A(10,x) B(10,x)}
+	\label{colunas}
+\end{figure}
+
+\section{CONCLUSÃO}
+\label{conclusao}
+
+	O problema de calcular o produto de Kronecker das matriz foi solucionado sem muitas complicações. As matrizes foram alocadas dinâmicamente com sucesso, de acordo com o \textit{Valgrind}. Além disso, um padrão de código bem modularizado foi seguido, para que os módulos possam ser reutilizados futuramente.
+
+	O código também já foi construído de uma maneira em que, caso futuramente seja necessário paralelizá-lo, poucas mudanças no código precisarão ser feitas para tal.
+
+	Os testes foram bem sucedidos pois o tempo de processamento do algoritmo em diversas situações ocorreu como esperado.
+
+	As primitivas básicas da linguagem C, como alocação dinâmica de memória e manipulação de arquivos, foram bem exploradas no trabalho prático. Além disso, procurei construir uma documentação bem detalhada sobre toda a estrutura e funcionamento do programa implementado.
+
+\bibliographystyle{sbc}
+\bibliography{tp1}
+
+\end{document}
