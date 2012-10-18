@@ -1,8 +1,9 @@
+
 %	Documentação do Trabalho Prático 1 de AEDSIII
 %	@Sandro Miccoli
 %
 %	* Você pode identificar erros de grafia através do seguinte comando linux:
-%		aspell --encoding="iso8859-1" -c -t=tex --lang="pt_BR" tp0.tex
+%		aspell --encoding="utf-8" -c -t=tex --lang="pt_BR" tp1.tex
 %
 
 \documentclass[12pt]{article}
@@ -21,8 +22,7 @@
 \usepackage[lined,algonl,ruled]{algorithm2e}
 \usepackage{multirow}
 \usepackage[brazil]{babel}
-\usepackage[latin1]{inputenc}
-\usepackage{pythonhighlighting}
+\usepackage[utf8]{inputenc}
 \usepackage{listings}
 
 \usepackage{alltt}
@@ -36,8 +36,7 @@
 
 \address{Departamento de Ciência da Computação -- Universidade Federal de Minas Gerais (UFMG)\\
 \\
-\today
-}
+\today}
 
 
 \begin{document}
@@ -46,12 +45,11 @@
 
 \begin{resumo}
 Esse relatório descreve como foi foi solucionado o problema proposto no Trabalho Prático 1, o qual será detalhado ao longo das próximas seções. Será descrito também a modelagem do problema e a solução proposta para tal. Finalmente será detalhado a análise de complexidade dos algoritmos, os testes utilizados para comprovar tais análises e uma breve conclusão do trabalho implementado.
-
 \end{resumo}
 
 \section{INTRODUÇÃO}
 
-	A situação que deparamos neste trabalho é a seguinte: a distribuidora de produtos, Atlanticon, está precisando de uma consultoria para decidir em qual cidade deve instalar a nova filial para servir uma daterminada região.
+	A situação que deparamos neste trabalho é a seguinte: a distribuidora de produtos, Atlanticon, está precisando de uma consultoria para decidir em qual cidade deve instalar a nova filial para servir uma determinada região.
 
 	A empresa possui conhecimento das distâncias entre quaisquer duas cidades da região que sejam conectadas por algum trilho. Além disso, o trem, precariamente, realiza a entrega de apenas um produto por viagem, tornando necessário retornar para a filial para carregar um novo produto.
 
@@ -96,7 +94,7 @@ Esse relatório descreve como foi foi solucionado o problema proposto no Trabalh
 \section{SOLUÇÃO PROPOSTA}
 \label{solucao_proposta}
 
-	O problema que deparamos é minimizar o custo de combustível dos trens da empresa Atlanticon. Como já modelamos nosso problema como um grafo, nada melhor que um algorítmo específico que nos traga a solução. A seguir uma definição de \cite{sedgewick} para o problema de caminho mínimo:
+	O problema que deparamos é minimizar o custo de combustível dos trens da empresa Atlanticon. Como já modelamos nosso problema como um grafo, nada melhor que um algoritmo específico que nos traga a solução. A seguir uma definição de \cite{sedgewick} para o problema de caminho mínimo:
 
 	\begin{quote}
 	Dado um digrafo com custos não negativos nos arcos e um vértice \textit{s}, encontrar uma arborescência de caminhos mínimos com raiz \textit{s} no digrafo.
@@ -106,13 +104,13 @@ Esse relatório descreve como foi foi solucionado o problema proposto no Trabalh
 
 	A solução proposta aqui foi realizar o algoritmo de Dijkstra para cada vértice do grafo, então descobrir o menor caminho dentre todos os possíveis para resolver nosso problema de distribuição de produtos pelas linhas de trem.
 
-	Para o \textbf{Cenário 1} utilizamos apenas as distâncias entre as cidades como peso nas aretas para calcular o caminho mínimo entre os vértices.
+	Para o \textbf{Cenário 1} utilizamos apenas as distâncias entre as cidades como peso nas arestas para calcular o caminho mínimo entre os vértices.
 
 	Já no \textbf{Cenário 2}, para cada cidade, calculamos o produto entre a distância das cidades com o volume de pedidos de cada uma. O menor produto resulta na nossa melhor escolha.
 
 	No \textbf{Cenário 3}, temos que minimizar o valor de $X$, para isso inicialmente calculamos a maior distância percorrida para cada cidade. Assim garantimos a quantidade de horas mínima para o pedido chegar. Dentre essas maiores distâncias, escolhemos a menor delas, minimizando o valor de $X$.
 
-	Além desses cenários, tempos que retornar qual o prejuízo percentual acarretado quando a cidade é escolhida, de modo a garantir o menor tempo de entraga máximo. Para isso calculamos a razão entre os custos do \textbf{Cenário 1} e \textbf{Cenário 3}. Isso nos retorna qual a porcentagem de aumento de combustível caso a Atlanticon escolher a cidade do \textbf{Cenário 3} para implantar a filial.
+	Além desses cenários, tempos que retornar qual o prejuízo percentual acarretado quando a cidade é escolhida, de modo a garantir o menor tempo de entrega máximo. Para isso calculamos a razão entre os custos do \textbf{Cenário 1} e \textbf{Cenário 3}. Isso nos retorna qual a porcentagem de aumento de combustível caso a Atlanticon escolher a cidade do \textbf{Cenário 3} para implantar a filial.
 
 \subsection{Principais funções implementadas}
 
@@ -180,7 +178,7 @@ Esse relatório descreve como foi foi solucionado o problema proposto no Trabalh
 \subsubsection{Arquivos .c}
 
 \begin{itemize}
-\item \textbf{tp1.c} Arquivo principal do progrma, lê todas as instâncias de problemas do arquivo de entrada, realiza os cálculos dos cenários e insere cada resultado no arquivo de saída.
+\item \textbf{tp1.c} Arquivo principal do programa, lê todas as instâncias de problemas do arquivo de entrada, realiza os cálculos dos cenários e insere cada resultado no arquivo de saída.
 \item \textbf{matriz.c} Contém todas as funções de manipulação, leitura e escrita de matrizes.
 \item \textbf{grafos\_matriz.c} Contém todas as funções de manipulação, leitura e escrita de grafos. Utiliza o TAD de matriz como implementação da matriz de adjacências.
 \item \textbf{dijkstra.c} Contém a implementação do algoritmo de Dijkstra, tanto para um vértice quanto para todos os vértices do grafo.
@@ -201,7 +199,9 @@ Esse relatório descreve como foi foi solucionado o problema proposto no Trabalh
 O programa deve ser compilado através do compilador GCC através de um makefile ou do seguinte comando:
 
 \begin{footnotesize}
-\begin{verbatim} gcc -Wall -Lsrc src/tp1.c src/arquivos.c src/grafos_matriz.c src/matriz.c src/dijkstra.c src/consultoria.c -o tp1 \end{verbatim}
+\begin{verbatim}
+gcc -Wall -Lsrc src/tp1.c src/arquivos.c src/grafos_matriz.c
+                src/matriz.c src/dijkstra.c src/consultoria.c -o tp1 \end{verbatim}
 \end{footnotesize}
 
 Ou através do comando $make$.
@@ -224,12 +224,12 @@ O comando para a execução do programa é da forma:
 
 A primeira linha do arquivo de entrada contém o valor \textit{k} de instâncias que o arquivo contém. A próxima linha contém a quantidade \textit{n} de cidades que o grafo contém. As próximas \textit{m} linhas contém a matriz de adjacência referente à esse grafo. Por último, a última linha contém \textit{n} inteiros que são referentes ao volume médio de pedidos de cada cidade da região.
 
-A Figura~\ref{grafo} contém um grafo com 5 cidades, bem conectado. Geramos um arquivo que contém a matriz de adjacência dele e o volume de pedidos de cada cidade. Esse arquivo de entrada tem a seguinte configuração:
+A Figura~\ref{grafo} contém um grafo com 7 cidades, esparso. Geramos um arquivo que contém a matriz de adjacência dele e o volume de pedidos de cada cidade. Esse arquivo de entrada tem a seguinte configuração:
 
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=.8\textwidth]{graph_teste.png}
-	\caption{Grafo com 5 cidades}
+	\caption{Grafo esparso com 7 cidades}
 	\label{grafo}
 \end{figure}
 
@@ -261,47 +261,83 @@ Considerando o grafo da Figura~\ref{grafo}, o resultado obtido após a execuçã
 \section{AVALIAÇÃO EXPERIMENTAL}
 \label{avaliacao_experimental}
 
+Para testar o algoritimo realizamos quatro testes, separados em dois grupos. O primeiro grupo de testes se refere à grafos esparsos e o segundo a grafos densos.
+
+Para cada grupo de testes fizemos um teste que varia a quantidade instâncias, com grafos de tamanho fixo (25 vértices), e outro teste com apenas uma instância e grafos de tamanhos crescentes.
+
+\subsection{Máquina utilizada}
+\label{maquina}
+
+Segue especificação da máquina utilizada para os testes:
+\begin{verbatim}
+model name:     Intel(R) Core(TM) i3 CPU       M 330  @ 2.13GHz
+cpu MHz:        933.000
+cache size:     3072 KB
+MemTotal:       3980124 kB
+\end{verbatim}
+
+\subsection{Grafos Esparsos - Variando quantidade de instâncias}
+\label{esparsos_inst}
+
+	Na Figura \ref{esp_inst_var}, é possível ver o tempo de execução para o primeiro teste. Aqui fixamos o tamanho do grafo para 25 vértices e variamos o número de instâncias, de 1 até 500. O maior tempo foi de $34$ segundos, para 500 instâncias.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.60\textwidth]{graph_esparso_instvar.png}
+	\caption{Grafos esparsos com instâncias variando até 500}
+	\label{esp_inst_var}
+\end{figure}
+
+\subsection{Grafos Esparsos - Variando tamanho dos grafos}
+\label{esparsos_graf}
+
+	Na Figura \ref{esp_graf_var}, é possível ver o tempo de execução para o segundo teste. Aqui fixamos quantidade de instâncias para apenas uma, e variamos a quantidade de vértices do grafo, que foi de 1 até 500. O maior tempo de execução foi de $246$ segundos, para 500 vértices.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.60\textwidth]{graph_esparso_grafvar.png}
+	\caption{Grafos esparsos com grafos variando até 500 vértices}
+	\label{esp_graf_var}
+\end{figure}
+
+\subsection{Grafos Densos - Variando quantidade de instâncias}
+\label{densos_inst}
+
+	Na Figura \ref{den_inst_var}, é possível ver o tempo de execução para o terceiro teste. Aqui fixamos o tamanho do grafo para 25 vértices e variamos o número de instâncias, de 1 até 500. O maior tempo foi de $30$ segundos, para 500 instâncias.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.60\textwidth]{graph_denso_instvar.png}
+	\caption{Grafos densos com instâncias variando até 500}
+	\label{den_inst_var}
+\end{figure}
+
+\subsection{Grafos Densos - Variando tamanho dos grafos}
+\label{densos_graf}
+
+	Na Figura \ref{den_graf_var}, é possível ver o tempo de execução para o quarto e último teste. Aqui fixamos quantidade de instâncias para apenas uma, e variamos a quantidade de vértices do grafo, que foi de 1 até 500. O maior tempo de execução foi de $224$ segundos, para 500 vértices.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.60\textwidth]{graph_denso_grafvar.png}
+	\caption{Grafos densos com grafos variando até 500 vértices}
+	\label{den_graf_var}
+\end{figure}
 
 \subsection{Resultado}
 
-	O primeiro teste realizado foi o seguinte: foi fixado o número de linhas e colunas das matrizes para 50. Ou seja, cada matriz tinha $2.500$ elementos, e as matrizes resultado tinham $6.250.000$ elementos cada uma.
+	O resultado geral dos testes ocorreu como esperado. Os testes em que foi variada apenas as instâncias (\ref{esparsos_inst} e \ref{densos_inst}) cresceu de forma esperada, em um comportamento quase que constante.
 
-	Na Figura \ref{instancias}, podemos ver que o tempo de processamento cresceu de uma maneira esperada. Como a complexidade do algoritmo é definida basicamente pelo tamanho das matrizes, então uma variação do número de instâncias resulta em um crescimento praciamente constante no tempo de processamento do programa.
+    Já os testes em que variamos os tamanhos dos grafos (\ref{esparsos_graf} e \ref{densos_graf}) já deu pra visualizar melhor a complexidade do algoritmo de Dijkstra. Pelos gráficos é perceptível o crescimento exponencial de cada teste.
 
-\begin{figure}[p!]
-	\centering
-	\includegraphics[width=1\textwidth]{graph_inst.png}
-	\caption{A(50,50) B(50,50)}
-	\label{instancias}
-\end{figure}
+    Outra conclusão interessante é perceber que o Dijkstra que foi implementado neste trabalho funciona melhor para grafos densos do que para grafos mais esparsos. Veja a Figura \ref{graf_var} para uma melhor comparação entre os testes \ref{esparsos_graf} e \ref{densos_graf}.
 
-	Na Figura \ref{quadradas} foi feito um teste com matrizes quadradas. Tanto a matriz \textbf{A}, quanto a matriz \textbf{B} variaram o tamanho de $ 1 * 1 $ para $ 100 * 100 $. Ou seja, num momento tinham apenas um elemento e no último tinham $10.000$ elementos. A matriz \textbf{C}, no final desse teste, possuía $100.000.000$ elementos. O tempo de processamento aqui já cresceu de maneira exponencial, como era de se esperar por causa da complexidade exponencial do produto de Kronecker.
-
-
-\begin{figure}[p!]
-	\centering
-	\includegraphics[width=1\textwidth]{graph_quad.png}
-	\caption{Matrizes Quadradas A(x,x) B(x,x)}
-	\label{quadradas}
-\end{figure}
-
-	Os últimos dois testes foram configurados da seguinte maneira: fixamos as colunas e variamos as linhas e vice-versa.
-
-No primeiro, Figura \ref{linhas}, fixamos as colunas das matrizes em $10$ e variamos as linhas até $500$, ou seja, a matriz \textbf{C} começou com tamanho $1 * 100$ ($100$ elementos) e terminou com um tamanho de $250.000 * 100$ ($25.000.000$ elementos); no segundo, Figura \ref{colunas}, fixamos as linhas das matrizes em $10$ e variamos as colunas até $500$. O tempo de processamento desses testes se encontra nas figuras abaixo:
-
-\begin{figure}[p!]
-	\centering
-	\includegraphics[width=1\textwidth]{graph_lin.png}
-	\caption{Linhas - A(x,10) B(x,10)}
-	\label{linhas}
-\end{figure}
-
-\begin{figure}[p!]
-	\centering
-	\includegraphics[width=1\textwidth]{graph_col.png}
-	\caption{Colunas - A(10,x) B(10,x)}
-	\label{colunas}
-\end{figure}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=0.80\textwidth]{graph_grafvar.png}
+        \caption{Grafos densos e esparsos com grafos variando até 500 vértices}
+        \label{graf_var}
+    \end{figure}
 
 \section{CONCLUSÃO}
 \label{conclusao}
