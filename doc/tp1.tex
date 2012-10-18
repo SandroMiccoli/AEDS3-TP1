@@ -102,6 +102,8 @@ Esse relatório descreve como foi foi solucionado o problema proposto no Trabalh
 
 	O algoritmo que utilizaremos foi inventado por Edsger Dijkstra [a pronúncia é algo entre "Dêcstra"\ e "Dêicstra"] e publicado em 1959. O algoritmo pode ser usado, em particular, para encontrar um caminho de custo mínimo de um dado vértice a outro \cite{sedgewick}.
 
+	O algoritmo de Dijkstra assemelha-se ao busca em largura, mas é um algoritmo guloso, ou seja, toma a decisão que parece ótima no momento. Um exemplo prático do problema que pode ser resolvido pelo algoritmo de Dijkstra é: alguém precisa se deslocar de uma cidade para outra. Para isso, ela dispõe de várias estradas, que passam por diversas cidades. Qual delas oferece uma trajetória de menor caminho? \cite{wiki}
+
 	A solução proposta aqui foi realizar o algoritmo de Dijkstra para cada vértice do grafo, então descobrir o menor caminho dentre todos os possíveis para resolver nosso problema de distribuição de produtos pelas linhas de trem.
 
 	Para o \textbf{Cenário 1} utilizamos apenas as distâncias entre as cidades como peso nas arestas para calcular o caminho mínimo entre os vértices.
@@ -261,7 +263,7 @@ Considerando o grafo da Figura~\ref{grafo}, o resultado obtido após a execuçã
 \section{AVALIAÇÃO EXPERIMENTAL}
 \label{avaliacao_experimental}
 
-Para testar o algoritimo realizamos quatro testes, separados em dois grupos. O primeiro grupo de testes se refere à grafos esparsos e o segundo a grafos densos.
+Para testar o algoritmo realizamos quatro testes, separados em dois grupos. O primeiro grupo de testes se refere à grafos esparsos e o segundo a grafos densos.
 
 Para cada grupo de testes fizemos um teste que varia a quantidade instâncias, com grafos de tamanho fixo (25 vértices), e outro teste com apenas uma instância e grafos de tamanhos crescentes.
 
@@ -326,11 +328,11 @@ MemTotal:       3980124 kB
 
 \subsection{Resultado}
 
-	O resultado geral dos testes ocorreu como esperado. Os testes em que foi variada apenas as instâncias (\ref{esparsos_inst} e \ref{densos_inst}) cresceu de forma esperada, em um comportamento quase que constante.
+	O resultado geral dos testes ocorreu como esperado. Os testes em que foi variada apenas as instâncias (\ref{esparsos_inst} e \ref{densos_inst}) cresceu de forma esperada, em um crescimento quase que constante.
 
     Já os testes em que variamos os tamanhos dos grafos (\ref{esparsos_graf} e \ref{densos_graf}) já deu pra visualizar melhor a complexidade do algoritmo de Dijkstra. Pelos gráficos é perceptível o crescimento exponencial de cada teste.
 
-    Outra conclusão interessante é perceber que o Dijkstra que foi implementado neste trabalho funciona melhor para grafos densos do que para grafos mais esparsos. Veja a Figura \ref{graf_var} para uma melhor comparação entre os testes \ref{esparsos_graf} e \ref{densos_graf}.
+    Outra conclusão interessante é perceber que o Dijkstra que foi implementado neste trabalho funciona melhor para grafos densos do que para grafos mais esparsos. Veja a Figura \ref{graf_var} para uma melhor comparação entre os testes \ref{esparsos_graf} e \ref{densos_graf}. Apesar da diferença não ser muito significativa, para entradas maiores a diferença só tende a crescer.
 
     \begin{figure}[h!]
         \centering
@@ -342,13 +344,9 @@ MemTotal:       3980124 kB
 \section{CONCLUSÃO}
 \label{conclusao}
 
-	O problema de calcular o produto de Kronecker das matriz foi solucionado sem muitas complicações. As matrizes foram alocadas dinâmicamente com sucesso, de acordo com o \textit{Valgrind}. Além disso, um padrão de código bem modularizado foi seguido, para que os módulos possam ser reutilizados futuramente.
+    Modelamos o problema das linhas de trem e gasto com combustível com grafos, para assim, podermos utilizar algoritmos específicos que encontrassem o menor caminho de uma cidade até outra. Esta etapa do trabalho foi bem satisfatória. Pode-se dizer que a consultoria prestada para a distribuidora Atlanticon será vista com bons olhos, pois consegue solucionar o problema de forma eficiente e elegante.
 
-	O código também já foi construído de uma maneira em que, caso futuramente seja necessário paralelizá-lo, poucas mudanças no código precisarão ser feitas para tal.
-
-	Os testes foram bem sucedidos pois o tempo de processamento do algoritmo em diversas situações ocorreu como esperado.
-
-	As primitivas básicas da linguagem C, como alocação dinâmica de memória e manipulação de arquivos, foram bem exploradas no trabalho prático. Além disso, procurei construir uma documentação bem detalhada sobre toda a estrutura e funcionamento do programa implementado.
+    Vimos que o algoritmo de Dijkstra funciona melhor para grafos densos do que para grafos mais esparsos, o que na prática é o que acontece nos mapas reais. As cidades estão todas bem conectadas, porém cabe ao motorista decidir qual o melhor caminho. Neste caso, coube ao algoritmo definir, para cada cenário, qual seria a melhor opção de caminho, e, assim, escolher a melhor cidade para instalar a nova filial.
 
 \bibliographystyle{sbc}
 \bibliography{tp1}
