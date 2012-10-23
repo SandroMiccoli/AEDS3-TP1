@@ -1,7 +1,11 @@
 Gerador de Grafos
 =================
 
-Alguns arquivos que geram grafos de acordo com a especificação do trabalho prático.
+Scripts que geram grafos de acordo com a especificação do trabalho prático.
+
+Para executálos é necessário instalar o pacote python-numpy:
+
+	sudo apt-get install python-numpy
 
 Além disso, utilizando a ferramenta graphviz(http://www.graphviz.org/), foi criado um script para gerar um .png do grafo em questão.
 
