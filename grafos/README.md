@@ -3,7 +3,7 @@ Gerador de Grafos
 
 Scripts que geram grafos de acordo com a especificação do trabalho prático.
 
-Para executálos é necessário instalar o pacote python-numpy:
+Para executá-los é necessário instalar o pacote python-numpy:
 
 	sudo apt-get install python-numpy
 
